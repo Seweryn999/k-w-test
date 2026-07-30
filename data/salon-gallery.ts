@@ -10,82 +10,75 @@ import salon07 from "@/assets/images/salon-07.webp";
 import salon08 from "@/assets/images/salon-08.webp";
 
 export type SalonPhoto = {
-  /** Stabilny klucz listy — alt bywa redagowany, więc nie nadaje się na key. */
-  id: string;
   src: StaticImageData;
   alt: string;
-  /** Umiejscowienie w siatce bento (od breakpointu lg). */
-  tile: string;
-  /** Dobrane do rzeczywistej szerokości kafla: 85vw na mobile, 50vw / 25vw na desktopie. */
+};
+
+export type GalleryPhoto = SalonPhoto & {
+  /** Klasy rozpiętości w siatce bento (tylko lg+). */
+  span: string;
+  /** Rzeczywista szerokość kafla — steruje doborem wariantu z srcset. */
   sizes: string;
 };
 
-const WIDE_TILE_SIZES = "(min-width: 1024px) 50vw, 85vw";
-const NARROW_TILE_SIZES = "(min-width: 1024px) 25vw, 85vw";
-
 /**
- * Najszerszy kadr całej sali zarezerwowany dla hero — celowo nie występuje
- * w galerii, żeby to samo zdjęcie nie pojawiło się dwa razy na stronie głównej.
+ * Kadr panoramiczny — używany WYŁĄCZNIE w Hero.
+ * Świadomie nie pojawia się w galerii, żeby nie dublować zdjęcia na stronie.
  */
-export const heroPhoto = {
+export const heroPhoto: SalonPhoto = {
   src: salon06,
-  alt: "Wnętrze salonu Krystian Wojewoda Hair Design w Łodzi — rząd stanowisk fryzjerskich przy drewnianym blacie, ceglane ściany i wzorzysta podłoga",
+  alt: "Wnętrze salonu Krystian Wojewoda Hair Design w Łodzi — stanowiska fryzjerskie przy drewnianym blacie",
 };
 
+const SIZE_WIDE = "(min-width: 1024px) 620px, 85vw";
+const SIZE_TILE = "(min-width: 1024px) 305px, 85vw";
+
 /**
- * Kolejność w tablicy = kolejność w karuzeli mobilnej.
- * Na desktopie o układzie decyduje pole `tile`, więc kolejność w DOM jest dowolna.
+ * Kolejność w tablicy = kolejność w DOM = kolejność auto-placement w siatce.
+ * Wiersze 1–2 wypełniają: salon-01 (2×2) + salon-02 (1×2) + salon-03 (1×2).
+ * Wiersz 3 wypełniają cztery kafle 1×1. Razem 12 komórek = 4 kolumny × 3 wiersze.
  */
-export const salonGallery: SalonPhoto[] = [
+export const galleryPhotos: GalleryPhoto[] = [
   {
-    id: "sala-z-gory",
-    src: salon08,
-    alt: "Widok z góry na rząd stanowisk fryzjerskich przy drewnianym blacie, drewniany zegar na ceglanej ścianie i myjnie w tle",
-    tile: "lg:col-start-1 lg:col-span-2 lg:row-start-1 lg:row-span-2",
-    sizes: WIDE_TILE_SIZES,
-  },
-  {
-    id: "zegar-nad-stanowiskami",
-    src: salon02,
-    alt: "Czarna ceglana ściana z dużym drewnianym zegarem, podłużne lampy nad stanowiskami, na pierwszym planie myjnie fryzjerskie",
-    tile: "lg:col-start-3 lg:row-start-1 lg:row-span-2",
-    sizes: NARROW_TILE_SIZES,
-  },
-  {
-    id: "neon-na-ceglanej-scianie",
-    src: salon04,
-    alt: "Zielono podświetlony neon z nazwą salonu na czarnej ceglanej ścianie",
-    tile: "lg:col-start-4 lg:row-start-1",
-    sizes: NARROW_TILE_SIZES,
-  },
-  {
-    id: "drewniany-blat-stanowisk",
     src: salon01,
-    alt: "Masywny blat z litego drewna biegnący wzdłuż stanowisk, czarne fotele fryzjerskie i zieleń w tle",
-    tile: "lg:col-start-4 lg:row-start-2",
-    sizes: NARROW_TILE_SIZES,
+    alt: "Rząd czarnych foteli fryzjerskich przy długim drewnianym blacie z lustrami",
+    span: "lg:col-span-2 lg:row-span-2",
+    sizes: SIZE_WIDE,
   },
   {
-    id: "strefa-myjni",
-    src: salon05,
-    alt: "Strefa myjni z brązowymi pikowanymi fotelami, białymi umywalkami i kosmetykami, w tle sala ze stanowiskami",
-    tile: "lg:col-start-1 lg:col-span-2 lg:row-start-3 lg:row-span-2",
-    sizes: WIDE_TILE_SIZES,
+    src: salon02,
+    alt: "Ceglana ściana z drewnianym zegarem, lustra i myjnie fryzjerskie",
+    span: "lg:col-span-1 lg:row-span-2",
+    sizes: SIZE_TILE,
   },
   {
-    id: "wzorzysta-podloga",
     src: salon03,
-    alt: "Wzorzysta czarno-biała podłoga, czarne fotele przy drewnianym blacie i myjnie na pierwszym planie",
-    tile: "lg:col-start-3 lg:row-start-3 lg:row-span-2",
-    sizes: NARROW_TILE_SIZES,
+    alt: "Wzorzysta podłoga, fotele przy blacie i myjnie w salonie fryzjerskim",
+    span: "lg:col-span-1 lg:row-span-2",
+    sizes: SIZE_TILE,
   },
   {
-    id: "poczekalnia",
+    src: salon04,
+    alt: "Podświetlony neon z nazwą salonu na ciemnej ceglanej ścianie",
+    span: "lg:col-span-1",
+    sizes: SIZE_TILE,
+  },
+  {
+    src: salon05,
+    alt: "Strefa myjni ze skórzanymi fotelami i kosmetykami do pielęgnacji włosów",
+    span: "lg:col-span-1",
+    sizes: SIZE_TILE,
+  },
+  {
     src: salon07,
-    // Kadr poziomy, ale na desktopie świadomie przycięty do pionowego kafla —
-    // regał z kosmetykami i neon dają w tej scenie wystarczająco dużo pionu.
-    alt: "Poczekalnia ze skórzaną ławą, neonem z nazwą salonu i regałem z kosmetykami do włosów",
-    tile: "lg:col-start-4 lg:row-start-3 lg:row-span-2",
-    sizes: NARROW_TILE_SIZES,
+    alt: "Poczekalnia salonu ze skórzaną ławką, neonem i regałem z kosmetykami",
+    span: "lg:col-span-1",
+    sizes: SIZE_TILE,
+  },
+  {
+    src: salon08,
+    alt: "Stanowiska fryzjerskie z lustrami i drewnianym zegarem w Ogrodach Geyera",
+    span: "lg:col-span-1",
+    sizes: SIZE_TILE,
   },
 ];

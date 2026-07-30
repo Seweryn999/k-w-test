@@ -1,203 +1,206 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import { createPortal } from "react-dom";
-import Image, { type StaticImageData } from "next/image";
+import { useCallback, useEffect, useRef } from "react";
+import Image from "next/image";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
-type LightboxPhoto = {
-  src: string | StaticImageData;
-  alt: string;
-};
+import type { SalonPhoto } from "@/data/salon-gallery";
 
 type LightboxProps = {
-  photos: LightboxPhoto[];
-  index: number;
-  label: string;
+  photos: SalonPhoto[];
+  /** Indeks otwartego zdjęcia albo null, gdy lightbox jest zamknięty. */
+  index: number | null;
   onClose: () => void;
   onIndexChange: (index: number) => void;
 };
 
-const FOCUSABLE = "button, [href], [tabindex]:not([tabindex='-1'])";
-
 export function Lightbox({
   photos,
   index,
-  label,
   onClose,
   onIndexChange,
 }: LightboxProps) {
+  const reduce = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const photo = photos[index];
+  /** Kafel, z którego otwarto lightbox — wraca do niego focus po zamknięciu. */
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
-  const showPrevious = useCallback(() => {
-    onIndexChange((index - 1 + photos.length) % photos.length);
-  }, [index, photos.length, onIndexChange]);
+  const isOpen = index !== null;
+  const count = photos.length;
 
-  const showNext = useCallback(() => {
-    onIndexChange((index + 1) % photos.length);
-  }, [index, photos.length, onIndexChange]);
+  const goTo = useCallback(
+    (next: number) => onIndexChange((next + count) % count),
+    [count, onIndexChange],
+  );
 
-  // Trzymamy w DOM sąsiadów bieżącego zdjęcia (opacity-0, ale realnie pobierane),
-  // dzięki czemu nawigacja strzałkami jest natychmiastowa.
-  const mounted = useMemo(() => {
-    const total = photos.length;
-
-    return Array.from(
-      new Set([(index - 1 + total) % total, index, (index + 1) % total]),
-    );
-  }, [index, photos.length]);
-
-  // Blokada scrolla body — z kompensacją szerokości paska przewijania,
-  // żeby treść pod overlayem nie przeskakiwała.
+  // Zapamiętaj element, który miał focus przed otwarciem.
   useEffect(() => {
-    const { overflow, paddingRight } = document.body.style;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-
-    document.body.style.overflow = "hidden";
-
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    if (isOpen) {
+      restoreFocusRef.current = document.activeElement as HTMLElement | null;
+      closeButtonRef.current?.focus();
+    } else {
+      restoreFocusRef.current?.focus?.();
     }
+  }, [isOpen]);
+
+  // Blokada scrolla body + kompensacja szerokości paska przewijania,
+  // żeby strona pod spodem nie „skakała" w bok przy otwarciu.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const { body, documentElement } = document;
+    const scrollbar = window.innerWidth - documentElement.clientWidth;
+    const prevOverflow = body.style.overflow;
+    const prevPadding = body.style.paddingRight;
+
+    body.style.overflow = "hidden";
+    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
 
     return () => {
-      document.body.style.overflow = overflow;
-      document.body.style.paddingRight = paddingRight;
+      body.style.overflow = prevOverflow;
+      body.style.paddingRight = prevPadding;
     };
-  }, []);
+  }, [isOpen]);
 
-  // Focus na przycisk zamknięcia po otwarciu, powrót do kafla po zamknięciu.
+  // Klawiatura: Esc zamyka, strzałki nawigują, Tab krąży wewnątrz dialogu.
   useEffect(() => {
-    const previouslyFocused = document.activeElement as HTMLElement | null;
+    if (!isOpen || index === null) return;
 
-    closeButtonRef.current?.focus();
-
-    return () => previouslyFocused?.focus?.();
-  }, []);
-
-  // Esc, strzałki i pułapka na focus (Tab / Shift+Tab nie wychodzi poza dialog).
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
         onClose();
         return;
       }
 
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        showPrevious();
-        return;
-      }
-
       if (event.key === "ArrowRight") {
         event.preventDefault();
-        showNext();
+        goTo(index + 1);
         return;
       }
 
-      if (event.key !== "Tab") return;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goTo(index - 1);
+        return;
+      }
 
-      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE);
+      if (event.key !== "Tab" || !dialogRef.current) return;
 
-      if (!focusable || focusable.length === 0) return;
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        "button:not([disabled])",
+      );
+      if (focusable.length === 0) return;
 
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      const active = document.activeElement;
 
-      if (event.shiftKey && (active === first || !dialogRef.current?.contains(active))) {
+      if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && active === last) {
+      } else if (!event.shiftKey && document.activeElement === last) {
         event.preventDefault();
         first.focus();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, index, goTo, onClose]);
 
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, showPrevious, showNext]);
+  const current = index === null ? null : photos[index];
 
-  // Zamykamy tylko przy kliknięciu w tło — klik w samo zdjęcie ma być bezpieczny.
-  const closeOnBackdrop = (event: React.MouseEvent<HTMLElement>) => {
-    if (event.target === event.currentTarget) onClose();
-  };
-
-  return createPortal(
-    <div
-      ref={dialogRef}
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${label} — zdjęcie ${index + 1} z ${photos.length}`}
-      onClick={closeOnBackdrop}
-      className="fixed inset-0 z-[100] flex flex-col bg-black/95 backdrop-blur-sm"
-    >
-      <div className="flex shrink-0 items-center justify-between gap-4 px-5 py-4 sm:px-8">
-        <p className="text-xs font-black uppercase tracking-[0.35em] text-white/45">
-          {index + 1} / {photos.length}
-        </p>
-
-        <button
-          ref={closeButtonRef}
-          type="button"
-          onClick={onClose}
-          aria-label="Zamknij powiększenie zdjęcia"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white transition hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+  return (
+    <AnimatePresence>
+      {isOpen && current && (
+        <motion.div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Galeria wnętrza salonu, zdjęcie ${(index ?? 0) + 1} z ${count}`}
+          initial={reduce ? { opacity: 1 } : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: reduce ? 0 : 0.2 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/92 p-4 backdrop-blur-xl sm:p-8"
+          onClick={(event) => {
+            // Kliknięcie w tło zamyka; kliknięcie w zdjęcie lub przycisk — nie.
+            if (event.target === event.currentTarget) onClose();
+          }}
         >
-          <X size={20} />
-        </button>
-      </div>
+          <button
+            ref={closeButtonRef}
+            type="button"
+            onClick={onClose}
+            aria-label="Zamknij galerię"
+            className="absolute right-4 top-4 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 sm:right-8 sm:top-8"
+          >
+            <X size={20} />
+          </button>
 
-      <div
-        onClick={closeOnBackdrop}
-        className="relative flex min-h-0 flex-1 items-center justify-center px-3 pb-3 sm:px-8 sm:pb-8"
-      >
-        <div className="relative h-full w-full max-w-6xl">
-          {mounted.map((position) => (
-            <Image
-              key={position}
-              src={photos[position].src}
-              alt={position === index ? photos[position].alt : ""}
-              aria-hidden={position !== index}
-              fill
-              loading="eager"
-              decoding="async"
-              sizes="(min-width: 1024px) 90vw, 100vw"
-              className={`object-contain transition-opacity duration-200 motion-reduce:transition-none ${
-                position === index ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+          <button
+            type="button"
+            onClick={() => goTo((index ?? 0) - 1)}
+            aria-label="Poprzednie zdjęcie"
+            className="absolute left-3 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 sm:left-8"
+          >
+            <ChevronLeft size={22} />
+          </button>
 
-      <div className="flex shrink-0 items-center justify-center gap-4 px-5 pb-6 sm:pb-8">
-        <button
-          type="button"
-          onClick={showPrevious}
-          aria-label="Poprzednie zdjęcie"
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white transition hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-        >
-          <ChevronLeft size={22} />
-        </button>
+          <button
+            type="button"
+            onClick={() => goTo((index ?? 0) + 1)}
+            aria-label="Następne zdjęcie"
+            className="absolute right-3 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 sm:right-8"
+          >
+            <ChevronRight size={22} />
+          </button>
 
-        <p className="max-w-md text-center text-sm leading-6 text-white/55">
-          {photo.alt}
-        </p>
+          <figure className="relative flex max-h-full w-full max-w-6xl flex-col items-center gap-4">
+            <div className="relative max-h-[76vh] w-full overflow-hidden rounded-2xl">
+              <Image
+                key={index}
+                src={current.src}
+                alt={current.alt}
+                placeholder="blur"
+                sizes="(min-width: 1280px) 1152px, 92vw"
+                className="max-h-[76vh] w-full object-contain"
+              />
+            </div>
 
-        <button
-          type="button"
-          onClick={showNext}
-          aria-label="Następne zdjęcie"
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white transition hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-        >
-          <ChevronRight size={22} />
-        </button>
-      </div>
-    </div>,
-    document.body,
+            <figcaption className="max-w-2xl text-center text-xs leading-5 text-white/55">
+              {current.alt}
+              <span className="mt-1 block tracking-[0.28em] text-white/35">
+                {(index ?? 0) + 1} / {count}
+              </span>
+            </figcaption>
+          </figure>
+
+          {/*
+            Sąsiednie kadry renderowane poza kadrem widoku — przeglądarka je pobiera,
+            więc nawigacja strzałkami jest natychmiastowa. `display: none` nie zadziała,
+            bo część przeglądarek pomija wtedy pobieranie.
+          */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0"
+          >
+            {[(index ?? 0) - 1, (index ?? 0) + 1].map((neighbour) => {
+              const photo = photos[(neighbour + count) % count];
+              return (
+                <Image
+                  key={photo.src.src}
+                  src={photo.src}
+                  alt=""
+                  sizes="(min-width: 1280px) 1152px, 92vw"
+                />
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

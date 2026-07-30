@@ -21,7 +21,7 @@ import {
 import pic1 from "@/assets/images/pic1.png";
 import pic2 from "@/assets/images/pic2.png";
 import pic3 from "@/assets/images/pic3.png";
-import background from "@/assets/images/background.png";
+import background from "@/assets/images/salon-06.webp";
 
 import krystian from "@/assets/images/krystian.png";
 import mariola from "@/assets/images/mariola.png";
