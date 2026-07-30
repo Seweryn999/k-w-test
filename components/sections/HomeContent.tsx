@@ -32,6 +32,7 @@ import marta from "@/assets/images/marta.png";
 
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Container } from "@/components/ui/Container";
+import { InteriorGallery } from "@/components/sections/InteriorGallery";
 
 const services = [
   {
@@ -400,6 +401,8 @@ export function HomeContent() {
           </div>
         </Container>
       </AnimatedSection>
+
+      <InteriorGallery />
 
       <AnimatedSection className="relative overflow-hidden bg-gradient-to-br from-[#2f2f2f] via-[#111111] to-[#050505] py-28 text-white">
         <Image
