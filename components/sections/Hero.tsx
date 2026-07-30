@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Phone, ArrowUpRight, MapPin } from "lucide-react";
 
 import logo from "@/assets/images/logo.png";
-import background from "@/assets/images/background.png";
+import { heroPhoto } from "@/data/salon-gallery";
 import { BOOKSY_URL } from "@/data/navigation";
 
 export function Hero() {
@@ -14,17 +14,26 @@ export function Hero() {
     <section className="relative mt-20 min-h-[calc(100vh-80px)] w-full overflow-hidden bg-black text-white">
       <div className="absolute inset-0 bg-black" />
 
+      {/*
+        Obraz LCP — `preload` zastępuje w Next 16 zdeprecjonowane `priority`
+        (wstrzykuje <link rel="preload"> w <head>, bez lazy-loadingu).
+      */}
       <Image
-        src={background}
-        alt="Zespół Krystian Wojewoda Hair Design"
+        src={heroPhoto.src}
+        alt={heroPhoto.alt}
         fill
-        priority
+        preload
         sizes="100vw"
-        className="object-cover object-center opacity-70 md:object-contain md:object-right"
+        className="object-cover object-center opacity-70"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/55 to-black/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-black/10" />
+      {/*
+        Poprzednie zdjęcie było na md+ dosunięte do prawej (object-contain),
+        więc tekst leżał na czystej czerni. Kadr wnętrza wypełnia całą sekcję,
+        dlatego przyciemniamy lewą stronę i dół — pod nagłówkiem i lidem.
+      */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/25" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/15" />
 
       <motion.div
         initial={{ opacity: 0, y: 35 }}
