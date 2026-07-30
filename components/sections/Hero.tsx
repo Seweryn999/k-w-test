@@ -49,7 +49,7 @@ export function Hero() {
                 alt="Krystian Wojewoda Hair Design"
                 width={38}
                 height={38}
-                priority
+                preload
               />
 
               <span className="text-xs uppercase tracking-[0.28em] text-white/75">

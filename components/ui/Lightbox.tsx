@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 type LightboxPhoto = {
-  src: string;
+  src: string | StaticImageData;
   alt: string;
 };
 
@@ -158,7 +158,7 @@ export function Lightbox({
         <div className="relative h-full w-full max-w-6xl">
           {mounted.map((position) => (
             <Image
-              key={photos[position].src}
+              key={position}
               src={photos[position].src}
               alt={position === index ? photos[position].alt : ""}
               aria-hidden={position !== index}

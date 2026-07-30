@@ -42,7 +42,7 @@ export function InteriorGallery() {
         <ul className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-4 lg:grid-rows-[200px_200px_170px_170px] lg:overflow-visible lg:px-0 lg:pb-0 xl:grid-rows-[240px_240px_200px_200px] [&::-webkit-scrollbar]:hidden">
           {salonGallery.map((photo, index) => (
             <li
-              key={photo.src}
+              key={photo.id}
               className={`shrink-0 basis-[85%] snap-center lg:basis-auto ${photo.tile}`}
             >
               {/*
