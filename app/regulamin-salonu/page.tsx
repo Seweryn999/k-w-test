@@ -14,11 +14,10 @@ const sections = [
     title: "1. Rezerwacja terminu przez portal Booksy",
     content: (
       <p className="leading-7">
-        W celu rezerwacji terminu, telefonicznie lub przez portal Booksy,
-        każdy klient zobowiązany jest do uiszczenia przedpłaty w wysokości
-        zależnej od rodzaju usługi. W przypadku nieuiszczenia przedpłaty
-        maksymalnie do 24h po rezerwacji, zostanie ona automatycznie
-        anulowana.
+        W celu rezerwacji terminu, telefonicznie lub przez portal Booksy, każdy
+        klient zobowiązany jest do uiszczenia przedpłaty w wysokości zależnej od
+        rodzaju usługi. W przypadku nieuiszczenia przedpłaty maksymalnie do 24h
+        po rezerwacji, zostanie ona automatycznie anulowana.
       </p>
     ),
   },
@@ -28,12 +27,11 @@ const sections = [
     content: (
       <p className="leading-7">
         Niniejszy punkt regulaminu dotyczy wyłącznie nowych klientów
-        umawiających się na wizytę po raz pierwszy drogą telefoniczną.
-        Klienci są zobowiązani do dokonania przedpłaty przelewem na numer
-        konta podany przy rezerwacji terminu. Przedpłata powinna zostać
-        uiszczona w ciągu 48h od momentu dokonania rezerwacji. Brak
-        uiszczenia przedpłaty w wymaganym terminie skutkuje anulowaniem
-        rezerwacji.
+        umawiających się na wizytę po raz pierwszy drogą telefoniczną. Klienci
+        są zobowiązani do dokonania przedpłaty przelewem na numer konta podany
+        przy rezerwacji terminu. Przedpłata powinna zostać uiszczona w ciągu 48h
+        od momentu dokonania rezerwacji. Brak uiszczenia przedpłaty w wymaganym
+        terminie skutkuje anulowaniem rezerwacji.
       </p>
     ),
   },
@@ -53,11 +51,11 @@ const sections = [
     content: (
       <p className="leading-7">
         W celu poszanowania czasu zarówno naszych klientów, jak i naszego
-        personelu, prosimy o punktualne przybycie na umówioną wizytę.
-        Klienci, którzy spóźnią się więcej niż 20 minut, muszą liczyć się z
-        ewentualną odmową wykonania usługi (decyzję o wykonaniu usługi, bądź
-        jej anulowaniu podejmuje fryzjer) oraz poniesieniem częściowych
-        kosztów za rezerwację terminu.
+        personelu, prosimy o punktualne przybycie na umówioną wizytę. Klienci,
+        którzy spóźnią się więcej niż 20 minut, muszą liczyć się z ewentualną
+        odmową wykonania usługi (decyzję o wykonaniu usługi, bądź jej anulowaniu
+        podejmuje fryzjer) oraz poniesieniem częściowych kosztów za rezerwację
+        terminu.
       </p>
     ),
   },
@@ -67,15 +65,15 @@ const sections = [
     content: (
       <p className="leading-7">
         Jeśli musisz odwołać swoją wizytę, prosimy, abyś powiadomił nas o
-        wszelkich anulowaniach lub zmianach terminu co najmniej 24 godziny
-        przed wizytą (w przypadku wizyt poniedziałkowych czas na anulowanie
-        to co najmniej 48h przed wizytą). Jeśli rezerwacja została dokonana
-        tego samego dnia, prosimy o powiadomienie nas o tym co najmniej 4
-        godziny wcześniej. Anulowanie wizyty, które narusza te zasady,
-        spowoduje utratę wcześniejszej przedpłaty lub rezerwacja kolejnego
-        terminu będzie możliwa tylko i wyłącznie po wcześniejszym
-        uregulowaniu 50% kwoty niezrealizowanej usługi (dotyczy klientów
-        niemających konieczności uiszczenia przedpłaty).
+        wszelkich anulowaniach lub zmianach terminu co najmniej 24 godziny przed
+        wizytą (w przypadku wizyt poniedziałkowych czas na anulowanie to co
+        najmniej 48h przed wizytą). Jeśli rezerwacja została dokonana tego
+        samego dnia, prosimy o powiadomienie nas o tym co najmniej 4 godziny
+        wcześniej. Anulowanie wizyty, które narusza te zasady, spowoduje utratę
+        wcześniejszej przedpłaty lub rezerwacja kolejnego terminu będzie możliwa
+        tylko i wyłącznie po wcześniejszym uregulowaniu 50% kwoty
+        niezrealizowanej usługi (dotyczy klientów niemających konieczności
+        uiszczenia przedpłaty).
       </p>
     ),
   },
@@ -84,11 +82,11 @@ const sections = [
     title: "6. Niestawienie się na wizytę",
     content: (
       <p className="leading-7">
-        Niestawienie się na wizytę bez wcześniejszego odwołania spowoduje
-        utratę przedpłaty lub rezerwacja kolejnego terminu będzie możliwa
-        tylko i wyłącznie po wcześniejszym uregulowaniu 50% kwoty
-        niezrealizowanej usługi (dotyczy klientów niemających konieczności
-        uiszczenia przedpłaty).
+        Niestawienie się na wizytę bez wcześniejszego odwołania spowoduje utratę
+        przedpłaty lub rezerwacja kolejnego terminu będzie możliwa tylko i
+        wyłącznie po wcześniejszym uregulowaniu 50% kwoty niezrealizowanej
+        usługi (dotyczy klientów niemających konieczności uiszczenia
+        przedpłaty).
       </p>
     ),
   },
@@ -97,13 +95,12 @@ const sections = [
     title: "7. Gwarancja usług",
     content: (
       <p className="leading-7">
-        Twoje zadowolenie jest dla nas najwyższym priorytetem. Jeśli nie
-        jesteś w pełni zadowolony/a, prosimy o poinformowanie nas o tym
-        podczas zabiegu lub w ciągu 24 godzin po wykonaniu usługi.
-        Zobowiązujemy się wówczas do dokonania wszelkich koniecznych
-        poprawek. Reklamacje dotyczące usługi koloryzacji przyjmujemy
-        wyłącznie w terminie do 14 dni od daty jej wykonania. Po upływie tego
-        czasu reklamacje nie będą rozpatrywane.
+        Twoje zadowolenie jest dla nas najwyższym priorytetem. Jeśli nie jesteś
+        w pełni zadowolony/a, prosimy o poinformowanie nas o tym podczas zabiegu
+        lub w ciągu 24 godzin po wykonaniu usługi. Zobowiązujemy się wówczas do
+        dokonania wszelkich koniecznych poprawek. Reklamacje dotyczące usługi
+        koloryzacji przyjmujemy wyłącznie w terminie do 14 dni od daty jej
+        wykonania. Po upływie tego czasu reklamacje nie będą rozpatrywane.
       </p>
     ),
   },
@@ -137,13 +134,13 @@ export default function RegulaminPage() {
             </h1>
 
             <p className="mt-8 max-w-3xl text-lg leading-8 text-white/60">
-              Zasady rezerwacji, odwołania i realizacji wizyt w salonie
-              Krystian Wojewoda Hair Design.
+              Zasady rezerwacji, odwołania i realizacji wizyt w salonie Krystian
+              Wojewoda Hair Design.
             </p>
           </div>
 
           <div className="mx-auto max-w-3xl">
-            <div className="mb-12 rounded-3xl border border-white/10 bg-white/[0.04] p-6 md:p-10">
+            <div className="mb-12 rounded-3xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 p-6 md:p-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">
               <p className="mb-5 text-xs uppercase tracking-[0.45em] text-white/40">
                 Spis treści
               </p>
@@ -165,7 +162,7 @@ export default function RegulaminPage() {
             <div className="space-y-12 text-white/70">
               {sections.map((section) => (
                 <div key={section.id} id={section.id}>
-                  <h2 className="mb-4 text-2xl font-black uppercase text-white">
+                  <h2 className="text-white/80 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 rounded">
                     {section.title}
                   </h2>
                   {section.content}
