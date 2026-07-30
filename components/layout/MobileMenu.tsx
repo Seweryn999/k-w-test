@@ -2,13 +2,17 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowDown } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { BOOKSY_URL, navigation } from "@/data/navigation";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70";
+
+/** Wspólna typografia dla wszystkich pozycji menu — podstron i sekcji. */
+const NAV_ITEM =
+  "flex items-center justify-between gap-4 border-b border-white/10 py-5 text-3xl font-black uppercase leading-none transition hover:text-white/70";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -131,22 +135,32 @@ export function MobileMenu() {
                   key={item.href}
                   href={item.href}
                   onClick={close}
-                  className={`border-b border-white/10 py-5 text-3xl font-black uppercase leading-none transition hover:text-white/70 ${FOCUS_RING}`}
+                  className={`${NAV_ITEM} ${FOCUS_RING}`}
                 >
                   {item.label}
                 </Link>
               ))}
-            </nav>
 
-            <div className="space-y-3 border-t border-white/10 px-7 pb-8 pt-5">
+              {/*
+                Opinie to sekcja strony głównej, nie podstrona — ta sama
+                typografia co reszta, ale strzałka w dół sygnalizuje, że
+                link przewija, a nie przenosi na nowy adres.
+              */}
               <Link
                 href="/#opinie"
                 onClick={goToOpinie}
-                className={`flex h-14 w-full items-center justify-center rounded-full border border-white/25 bg-white/[0.08] text-sm font-bold uppercase tracking-[0.25em] text-white transition hover:bg-white/15 ${FOCUS_RING}`}
+                className={`${NAV_ITEM} text-white/75 ${FOCUS_RING}`}
               >
                 Opinie
+                <ArrowDown
+                  size={20}
+                  aria-hidden
+                  className="shrink-0 text-white/35"
+                />
               </Link>
+            </nav>
 
+            <div className="border-t border-white/10 px-7 pb-8 pt-5">
               <a
                 href={BOOKSY_URL}
                 target="_blank"
