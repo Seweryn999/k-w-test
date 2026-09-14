@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { BookingLink } from "@/components/ui/BookingLink";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { mainPrices, otherPrices, pricingRules as rules } from "@/data/pricing";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Cennik usług fryzjerskich - Krystian Wojewoda Hair Design",
   description:
     "Najlepszy fryzjer w Łodzi i okolicach ♛ Poznaj ceny usług fryzjerskich w salonie Krystian Wojewoda Hair Design: farbowanie, strzyżenie, modelowanie, balayage.",
-  alternates: { canonical: "/cennik/" },
-};
+  path: "/cennik/",
+});
 
 export default function CennikPage() {
   return (
@@ -16,6 +19,11 @@ export default function CennikPage() {
       <section className="py-20">
         <Container>
           <div className="mb-20 max-w-5xl">
+            <Breadcrumbs
+              crumbs={[{ name: "Cennik", path: "/cennik/" }]}
+              className="mb-8 block"
+            />
+
             <p className="mb-5 text-xs uppercase tracking-[0.55em] text-white/40">
               Cennik
             </p>
@@ -39,7 +47,7 @@ export default function CennikPage() {
                 </p>
 
                 <h2 className="mt-4 text-3xl font-black uppercase md:text-5xl">
-                  Standard / VIP
+                  Cennik Marioli i Krystiana
                 </h2>
               </div>
 
@@ -51,16 +59,15 @@ export default function CennikPage() {
           </div>
 
           <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-black/30">
-            <div className="grid grid-cols-[1fr_90px_90px] border-b border-white/10 bg-white/[0.06] px-4 py-5 text-xs font-black uppercase tracking-[0.25em] text-white/45 md:grid-cols-[1fr_150px_150px] md:px-8">
+            <div className="grid grid-cols-[1fr_90px] border-b border-white/10 bg-white/[0.06] px-4 py-5 text-xs font-black uppercase tracking-[0.25em] text-white/45 md:grid-cols-[1fr_150px] md:px-8">
               <div>Usługa</div>
-              <div className="text-right">Standard</div>
-              <div className="text-right">VIP</div>
+              <div className="text-right">Cena</div>
             </div>
 
-            {mainPrices.map(({ service, standard, vip }, index) => (
+            {mainPrices.map(({ service, standard }, index) => (
               <div
                 key={`${service}-${index}`}
-                className="grid grid-cols-[1fr_90px_90px] items-center border-b border-white/10 px-4 py-5 transition hover:bg-white/[0.04] md:grid-cols-[1fr_150px_150px] md:px-8"
+                className="grid grid-cols-[1fr_90px] items-center border-b border-white/10 px-4 py-5 transition hover:bg-white/[0.04] md:grid-cols-[1fr_150px] md:px-8"
               >
                 <div className="pr-4 text-sm font-bold uppercase leading-6 text-white/80 md:text-base">
                   {service}
@@ -68,10 +75,6 @@ export default function CennikPage() {
 
                 <div className="text-right text-sm font-black text-white md:text-lg">
                   {standard}
-                </div>
-
-                <div className="text-right text-sm font-black text-white/70 md:text-lg">
-                  {vip}
                 </div>
               </div>
             ))}
@@ -87,8 +90,8 @@ export default function CennikPage() {
             </h2>
 
             <p className="mt-5 max-w-3xl text-sm leading-7 text-white/50">
-              Cena zależy od długości i gęstości włosów, zużycia materiału
-              oraz stopnia trudności wykonania usługi.
+              Cena zależy od długości i gęstości włosów, zużycia materiału oraz
+              stopnia trudności wykonania usługi.
             </p>
           </div>
 
@@ -174,9 +177,31 @@ export default function CennikPage() {
               włosów.
             </p>
 
-            <div className="mt-10">
-              <Button href="/kontakt">Umów konsultację</Button>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <BookingLink size="lg">Umów konsultację</BookingLink>
+
+              <Button href="/kontakt">Zadaj pytanie</Button>
             </div>
+          </div>
+
+          {/*
+            Cennik to strona o najwyższej gotowości zakupowej — klient
+            zaakceptował już cenę, więc kolejnym krokiem ma być kalendarz,
+            a nie formularz kontaktowy.
+          */}
+          <div className="mt-8 flex flex-col items-center gap-6 rounded-[2rem] border border-white/10 bg-white/[0.05] p-8 text-center md:flex-row md:justify-between md:p-10 md:text-left">
+            <div>
+              <h2 className="text-3xl font-black uppercase leading-tight md:text-4xl">
+                Cena Ci pasuje?
+              </h2>
+
+              <p className="mt-3 max-w-xl text-white/60">
+                Sprawdź wolne terminy w kalendarzu online i zarezerwuj wizytę
+                u wybranego stylisty.
+              </p>
+            </div>
+
+            <BookingLink size="lg" className="shrink-0" />
           </div>
         </Container>
       </section>

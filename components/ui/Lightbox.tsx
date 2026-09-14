@@ -183,10 +183,7 @@ export function Lightbox({
             więc nawigacja strzałkami jest natychmiastowa. `display: none` nie zadziała,
             bo część przeglądarek pomija wtedy pobieranie.
           */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0"
-          >
+          <div aria-hidden className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
             {[(index ?? 0) - 1, (index ?? 0) + 1].map((neighbour) => {
               const photo = photos[(neighbour + count) % count];
               return (

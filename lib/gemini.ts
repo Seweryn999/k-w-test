@@ -1,3 +1,5 @@
+import { BOOKSY_URL } from "@/data/navigation";
+
 const GEMINI_MODEL = "gemini-2.5-flash";
 
 type ChatMessage = {
@@ -10,6 +12,18 @@ Odpowiadaj w języku, w którym pisze użytkownik. Bądź zwięzły, przyjazny i
 Korzystaj z poniższych informacji o salonie, gdy są odpowiednie, oraz ze swojej ogólnej wiedzy fryzjerskiej (porady dotyczące pielęgnacji, koloryzacji, doboru fryzury itp.).
 Jeśli użytkownik pyta o łączną/sumaryczną cenę kilku usług, policz sumę na podstawie cennika i podaj wynik.
 Jeśli nie znasz dokładnej ceny lub szczegółu dotyczącego salonu, zaproponuj kontakt: tel. +48 730 796 861, e-mail salonkwhd@gmail.com lub rezerwację przez Booksy.
+
+LINKI — zasady bezwzględne:
+- Każdy odnośnik podawaj wyłącznie w składni [tekst](adres). Nigdy nie wklejaj samego adresu URL.
+- Wolno Ci użyć TYLKO tych adresów, dokładnie w tym brzmieniu:
+  ${BOOKSY_URL}
+  /cennik/
+  /zespol/
+  /kontakt/
+  /blog/
+  /regulamin-salonu/
+- Nie wymyślaj żadnych innych adresów, ścieżek ani domen. Jeśli potrzebna strona nie znajduje się na powyższej liście, opisz ją słowami zamiast linkować.
+- Nie stosuj innych elementów Markdown: żadnego pogrubienia, kursywy, list ani nagłówków. Zwykły tekst i wyłącznie linki w podanej składni.
 
 Informacje o salonie:
 `;

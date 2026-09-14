@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { team as teamMembers } from "@/data/team";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { team as teamMembers, teamPhotoAlt } from "@/data/team";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Zespół - Krystian Wojewoda Hair Design",
   description:
     "Poznaj stylistów salonu Krystian Wojewoda Hair Design w Łodzi — doświadczony zespół specjalizujący się w strzyżeniu, koloryzacji i stylizacji włosów.",
-  alternates: { canonical: "/zespol/" },
-};
+  path: "/zespol/",
+});
 
 import krystian from "@/assets/images/krystian.png";
 import aneta from "@/assets/images/aneta.png";
@@ -48,6 +50,11 @@ export default function ZespolPage() {
 
         <Container>
           <div className="relative mb-24 border-b border-white/10 pb-16">
+            <Breadcrumbs
+              crumbs={[{ name: "Zespół", path: "/zespol/" }]}
+              className="mb-8 block"
+            />
+
             <p className="mb-6 text-xs uppercase tracking-[0.6em] text-white/35">
               Zespół
             </p>
@@ -85,7 +92,7 @@ export default function ZespolPage() {
                       <div className="relative aspect-[400/420] w-full max-w-[260px] overflow-hidden rounded-[1.5rem] bg-neutral-900 shadow-2xl shadow-black/50 md:max-w-[300px]">
                         <Image
                           src={person.image}
-                          alt={person.name}
+                          alt={teamPhotoAlt(person.slug)}
                           fill
                           priority={index < 2}
                           className="object-cover object-center"

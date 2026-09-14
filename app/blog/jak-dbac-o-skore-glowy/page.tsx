@@ -1,33 +1,20 @@
 import type { Metadata } from "next";
-import pic2 from "@/assets/images/pic2.png";
 
 import {
-  ArticleHeading,
   ArticleLayout,
+  ArticleHeading,
   ArticleList,
   ArticleParagraph,
 } from "@/components/blog/ArticleLayout";
+import { articleMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Jak dbać o skórę głowy - Krystian Wojewoda Hair Design",
-  description:
-    "Zdrowe włosy zaczynają się od zdrowej skóry głowy. Sprawdź najważniejsze zasady codziennej pielęgnacji.",
-  alternates: { canonical: "/blog/jak-dbac-o-skore-glowy/" },
-};
+const SLUG = "jak-dbac-o-skore-glowy";
+
+export const metadata: Metadata = articleMetadata(SLUG);
 
 export default function JakDbacOSkoreGlowyPage() {
   return (
-    <ArticleLayout
-      date="7 marca, 2022"
-      author="Krystian Wojewoda"
-      category="Pielęgnacja"
-      title="Jak dbać o skórę głowy"
-      image={pic2}
-      prev={{
-        href: "/blog/jaka-fryzura-pasuje-do-mojej-twarzy",
-        label: "Jaka fryzura pasuje do mojej twarzy?",
-      }}
-    >
+    <ArticleLayout slug={SLUG}>
       <ArticleParagraph>
         Dobre strzyżenie czy modna koloryzacja to nie wszystko. Na wizerunek i
         samopoczucie wpływa także ilość i jakość włosów oraz… zdrowa skóra

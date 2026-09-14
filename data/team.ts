@@ -70,3 +70,23 @@ export const team: TeamMember[] = [
     extraKeywords: ["recepcja", "manager"],
   },
 ];
+
+export function getTeamMember(slug: string): TeamMember {
+  const member = team.find((entry) => entry.slug === slug);
+
+  if (!member) {
+    throw new Error(`Brak osoby o slugu "${slug}" w data/team.ts`);
+  }
+
+  return member;
+}
+
+/**
+ * Opis zdjęcia stylisty. Samo imię w atrybucie alt nic nie mówi ani
+ * czytnikowi ekranu, ani wyszukiwarce grafik — rola i miasto już tak.
+ */
+export function teamPhotoAlt(slug: string): string {
+  const member = getTeamMember(slug);
+
+  return `${member.name} – ${member.role.toLowerCase()} w salonie fryzjerskim Krystian Wojewoda Hair Design w Łodzi`;
+}

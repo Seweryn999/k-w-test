@@ -3,6 +3,7 @@ import Link from "next/link";
 import { navigation } from "@/data/navigation";
 import { Container } from "@/components/ui/Container";
 import { MobileMenu } from "@/components/layout/MobileMenu";
+import { BookingLink } from "@/components/ui/BookingLink";
 import logo from "@/assets/images/logo.png";
 
 export function Header() {
@@ -20,17 +21,25 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="relative text-sm font-semibold uppercase tracking-[0.18em] text-white/75 transition hover:text-white after:absolute after:-bottom-2 after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden items-center gap-8 md:flex">
+          <nav className="flex items-center gap-8">
+            {navigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="relative text-sm font-semibold uppercase tracking-[0.18em] text-white/75 transition hover:text-white after:absolute after:-bottom-2 after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/*
+            CTA stale widoczne w przyklejonym nagłówku — na desktopie to jedyne
+            miejsce, z którego można umówić wizytę bez przewijania strony.
+          */}
+          <BookingLink className="tracking-[0.16em]" />
+        </div>
 
         <MobileMenu />
       </Container>
