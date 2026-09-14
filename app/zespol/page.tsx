@@ -14,32 +14,38 @@ export const metadata: Metadata = pageMetadata({
   path: "/zespol/",
 });
 
-import krystian from "@/assets/images/krystian.png";
-import aneta from "@/assets/images/aneta.png";
-import ania from "@/assets/images/ania.png";
-import danuta from "@/assets/images/danuta.png";
-import julia from "@/assets/images/julia.png";
-import monika from "@/assets/images/monika.png";
-import marta from "@/assets/images/marta.png";
-import romina from "@/assets/images/romina.png";
-import mariola from "@/assets/images/mariola.png";
+import krystian from "@/assets/images/krystian.webp";
+import ania from "@/assets/images/ania.webp";
+import danuta from "@/assets/images/danuta.webp";
+import monika from "@/assets/images/monika.webp";
+import marta from "@/assets/images/marta.webp";
+import romina from "@/assets/images/romina.webp";
+import mariola from "@/assets/images/mariola.webp";
+
+import { ZespolHero } from "@/components/sections/ZespolHero";
+import { teamBannerPhotos } from "@/data/team-gallery";
 
 const images: Record<string, StaticImageData> = {
   "krystian-wojewoda": krystian,
   "mariola-snieg": mariola,
   danuta,
-  aneta,
   ania,
   monika,
   romina,
-  julia,
   marta,
 };
 
-const team = teamMembers.map((member) => ({
-  ...member,
-  image: images[member.slug],
-}));
+/*
+  Na liście pokazujemy tylko osoby z aktualnym portretem (.webp) w `images`.
+  Aneta i Julia nie mają nowego zdjęcia, więc ich karty zostały zdjęte
+  z tej strony — dane w data/team.ts i ich podstrony zostają bez zmian.
+*/
+const team = teamMembers
+  .filter((member) => member.slug in images)
+  .map((member) => ({
+    ...member,
+    image: images[member.slug],
+  }));
 
 export default function ZespolPage() {
   return (
@@ -49,6 +55,8 @@ export default function ZespolPage() {
         <div className="pointer-events-none absolute -right-40 top-[700px] h-[600px] w-[600px] rounded-full bg-white/[0.03] blur-[130px]" />
 
         <Container>
+          <ZespolHero photos={teamBannerPhotos} />
+
           <div className="relative mb-24 border-b border-white/10 pb-16">
             <Breadcrumbs
               crumbs={[{ name: "Zespół", path: "/zespol/" }]}
@@ -89,14 +97,18 @@ export default function ZespolPage() {
                         reversed ? "md:order-2" : ""
                       }`}
                     >
-                      <div className="relative aspect-[400/420] w-full max-w-[260px] overflow-hidden rounded-[1.5rem] bg-neutral-900 shadow-2xl shadow-black/50 md:max-w-[300px]">
+                      {/*
+                        Nowe portrety .webp mają 1000×1250, czyli 4:5.
+                        Portrety są teraz pod banerem (to on jest LCP),
+                        więc nie dostają już `preload`/`priority`.
+                      */}
+                      <div className="relative aspect-[4/5] w-full max-w-[260px] overflow-hidden rounded-[1.5rem] bg-neutral-900 shadow-2xl shadow-black/50 md:max-w-[300px]">
                         <Image
                           src={person.image}
                           alt={teamPhotoAlt(person.slug)}
                           fill
-                          priority={index < 2}
                           className="object-cover object-center"
-                          sizes="380px"
+                          sizes="(min-width: 768px) 300px, 260px"
                         />
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
