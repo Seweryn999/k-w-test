@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/Container";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Polityka prywatności | Krystian Wojewoda Hair Design",
   description:
     "Polityka prywatności i informacje o przetwarzaniu danych osobowych w salonie Krystian Wojewoda Hair Design.",
-  alternates: { canonical: "/polityka-prywatnosci/" },
-};
+  path: "/polityka-prywatnosci/",
+});
 
 export default function PolitykaPrywatnosciPage() {
   return (
@@ -14,6 +16,11 @@ export default function PolitykaPrywatnosciPage() {
       <section className="py-20">
         <Container>
           <div className="mb-16 max-w-4xl">
+            <Breadcrumbs
+              crumbs={[{ name: "Polityka prywatności", path: "/polityka-prywatnosci/" }]}
+              className="mb-8 block"
+            />
+
             <p className="mb-5 text-xs uppercase tracking-[0.55em] text-white/40">
               Informacje prawne
             </p>
@@ -193,7 +200,7 @@ export default function PolitykaPrywatnosciPage() {
               <ul className="list-disc space-y-2 pl-5 leading-7">
                 <li>dostępu do swoich danych oraz uzyskania ich kopii,</li>
                 <li>sprostowania (poprawienia) danych,</li>
-                <li>usunięcia danych ("prawo do bycia zapomnianym"),</li>
+                <li>usunięcia danych (&bdquo;prawo do bycia zapomnianym&rdquo;),</li>
                 <li>ograniczenia przetwarzania,</li>
                 <li>przenoszenia danych,</li>
                 <li>

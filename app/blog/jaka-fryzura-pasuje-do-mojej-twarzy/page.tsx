@@ -1,36 +1,19 @@
 import type { Metadata } from "next";
-import pic3 from "@/assets/images/pic3.png";
 
 import {
-  ArticleHeading,
   ArticleLayout,
+  ArticleHeading,
   ArticleParagraph,
 } from "@/components/blog/ArticleLayout";
+import { articleMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Jaka fryzura pasuje do mojej twarzy? - Krystian Wojewoda Hair Design",
-  description:
-    "Dowiedz się, jak dobrać fryzurę do kształtu twarzy oraz własnego stylu życia.",
-  alternates: { canonical: "/blog/jaka-fryzura-pasuje-do-mojej-twarzy/" },
-};
+const SLUG = "jaka-fryzura-pasuje-do-mojej-twarzy";
+
+export const metadata: Metadata = articleMetadata(SLUG);
 
 export default function JakaFryzuraPasujeDoMojejTwarzyPage() {
   return (
-    <ArticleLayout
-      date="27 grudnia, 2021"
-      author="Krystian Wojewoda"
-      category="Trendy"
-      title="Jaka fryzura pasuje do mojej twarzy?"
-      image={pic3}
-      prev={{
-        href: "/blog/kosmetyki-do-pielegnacji-zniszczonych-wlosow",
-        label: "Kosmetyki do pielęgnacji zniszczonych włosów – lista must have",
-      }}
-      next={{
-        href: "/blog/jak-dbac-o-skore-glowy",
-        label: "Jak dbać o skórę głowy",
-      }}
-    >
+    <ArticleLayout slug={SLUG}>
       <ArticleParagraph>
         Chyba każdy zadał sobie choć raz w życiu pytanie: jaka fryzura do
         mnie pasuje? Lepiej będę wyglądać w dłuższych, wyprostowanych

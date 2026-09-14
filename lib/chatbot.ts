@@ -150,7 +150,8 @@ const TEAM_ENTRIES: FaqEntry[] = team.map((member) => ({
   keywords: [member.name, member.nickname, ...(member.extraKeywords ?? [])],
   answer: () => {
     const intro = `${member.name} ("${member.nickname}") – ${member.role}.`;
-    return member.bio ? `${intro} ${member.bio}` : intro;
+    const profile = `[Zobacz profil](/zespol/${member.slug}/).`;
+    return member.bio ? `${intro} ${member.bio} ${profile}` : `${intro} ${profile}`;
   },
 }));
 
@@ -158,6 +159,11 @@ const TEAM_ENTRIES: FaqEntry[] = team.map((member) => ({
  * One entry per price-list row whose service name has at least two meaningful
  * words, generated from the same data used on the Cennik page. Single-word
  * services (e.g. "Modelowanie", "Broda") are left to the general FAQ entries.
+ *
+ * Only `mainPrices` is used here, so the quoted amount always comes from the
+ * Mariola/Krystian table. The answer says so explicitly — the other stylists
+ * charge less, and the homepage advertises "od <lowest>", so an unqualified
+ * number here would read as a contradiction to anyone comparing the two.
  */
 const PRICE_ENTRIES: FaqEntry[] = mainPrices
   .map((row) => {
@@ -167,7 +173,7 @@ const PRICE_ENTRIES: FaqEntry[] = mainPrices
   .filter(({ cleanedService }) => tokenize(cleanedService).length > 1)
   .map(({ cleanedService, row }) => ({
     keywords: [cleanedService],
-    answer: `${cleanedService}: ${row.standard} zł (Standard) / ${row.vip} zł (VIP).`,
+    answer: `${cleanedService} u Marioli i Krystiana: ${row.standard} zł. U pozostałych fryzjerów ceny są niższe — pełny [cennik](/cennik/).`,
   }));
 
 const ALL_FAQ: FaqEntry[] = [...FAQ, ...PRICE_ENTRIES, ...TEAM_ENTRIES];

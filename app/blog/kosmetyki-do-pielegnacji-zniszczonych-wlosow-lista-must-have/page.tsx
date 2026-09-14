@@ -1,34 +1,19 @@
 import type { Metadata } from "next";
-import kosmetyki from "@/assets/images/kosmetyki.png";
+
 import {
-  ArticleHeading,
   ArticleLayout,
+  ArticleHeading,
   ArticleParagraph,
 } from "@/components/blog/ArticleLayout";
+import { articleMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title:
-    "Kosmetyki do pielęgnacji zniszczonych włosów – lista must have - Krystian Wojewoda Hair Design",
-  description:
-    "Najważniejsze kosmetyki, które pomagają odbudować strukturę włosa i zachować zdrowy wygląd na co dzień.",
-  alternates: {
-    canonical: "/blog/kosmetyki-do-pielegnacji-zniszczonych-wlosow-lista-must-have/",
-  },
-};
+const SLUG = "kosmetyki-do-pielegnacji-zniszczonych-wlosow-lista-must-have";
+
+export const metadata: Metadata = articleMetadata(SLUG);
 
 export default function KosmetykiDoPielegnacjiZniszczonychWlosowPage() {
   return (
-    <ArticleLayout
-      date="7 marca, 2022"
-      author="Krystian Wojewoda"
-      category="Trendy"
-      title="Kosmetyki do pielęgnacji zniszczonych włosów – lista must have"
-      image={kosmetyki}
-      next={{
-        href: "/blog/jaka-fryzura-pasuje-do-mojej-twarzy",
-        label: "Jaka fryzura pasuje do mojej twarzy?",
-      }}
-    >
+    <ArticleLayout slug={SLUG}>
       <ArticleParagraph>
         Gdy włosy są suche, szorstkie, matowe, łamliwe, puszą się, kruszą,
         rozdwajają… najpewniej pilnie potrzebują ratunku. Jak naprawić włosy

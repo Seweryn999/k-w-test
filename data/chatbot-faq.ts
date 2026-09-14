@@ -1,5 +1,6 @@
 import { BOOKSY_URL } from "@/data/navigation";
 import { team } from "@/data/team";
+import { lowestPriceLabel, priceRangeLabel } from "@/data/pricing";
 
 export type FaqEntry = {
   /** Single words or multi-word phrases. Phrases score higher when fully matched. */
@@ -22,7 +23,7 @@ export const SMALL_TALK: FaqEntry[] = [
       "yo",
     ],
     answer:
-      "Cześć! W czym mogę pomóc? Mogę podpowiedzieć w sprawach cennika, zespołu, godzin otwarcia, pielęgnacji i rezerwacji.",
+      "Cześć! W czym mogę pomóc? Mogę podpowiedzieć w sprawach [cennika](/cennik/), [zespołu](/zespol/), godzin otwarcia, pielęgnacji i rezerwacji.",
   },
   {
     keywords: [
@@ -39,7 +40,7 @@ export const SMALL_TALK: FaqEntry[] = [
   {
     keywords: ["do widzenia", "pa", "papa", "bye", "narazie", "na razie"],
     answer:
-      "Do zobaczenia! Pamiętaj, że wizytę możesz zarezerwować online przez Booksy lub telefonicznie: +48 730 796 861.",
+      `Do zobaczenia! Pamiętaj, że wizytę możesz [zarezerwować w Booksy](${BOOKSY_URL}) lub telefonicznie: [+48 730 796 861](tel:+48730796861).`,
   },
   {
     keywords: [
@@ -53,7 +54,7 @@ export const SMALL_TALK: FaqEntry[] = [
       "co umiesz",
     ],
     answer:
-      "Jestem wirtualnym asystentem salonu Krystian Wojewoda Hair Design. Odpowiem na pytania o cennik, zespół, godziny otwarcia, usługi i rezerwacje.",
+      "Jestem wirtualnym asystentem salonu Krystian Wojewoda Hair Design. Odpowiem na pytania o [cennik](/cennik/), [zespół](/zespol/), godziny otwarcia, usługi i rezerwacje.",
   },
 ];
 
@@ -95,7 +96,7 @@ export const FAQ: FaqEntry[] = [
       "ogrody geyera",
     ],
     answer:
-      "Znajdziesz nas na ul. Piotrkowskiej 293/305 w Łodzi (Ogrody Geyera). Mapę i wskazówki dojazdu znajdziesz na stronie Kontakt.",
+      "Znajdziesz nas na ul. Piotrkowskiej 293/305 w Łodzi (Ogrody Geyera). Mapę i wskazówki dojazdu znajdziesz na stronie [kontakt](/kontakt/).",
   },
   {
     keywords: [
@@ -115,7 +116,7 @@ export const FAQ: FaqEntry[] = [
       "napisac",
     ],
     answer:
-      "Możesz do nas zadzwonić: +48 730 796 861 lub napisać na salonkwhd@gmail.com. Odpowiemy najszybciej jak się da.",
+      "Możesz do nas zadzwonić: [+48 730 796 861](tel:+48730796861) lub napisać na [salonkwhd@gmail.com](mailto:salonkwhd@gmail.com). Odpowiemy najszybciej jak się da.",
   },
   {
     keywords: [
@@ -139,7 +140,7 @@ export const FAQ: FaqEntry[] = [
       "online",
       "rezerwacja online",
     ],
-    answer: `Najszybciej zarezerwujesz wizytę online przez Booksy: ${BOOKSY_URL}. Możesz też zadzwonić pod +48 730 796 861 lub napisać na salonkwhd@gmail.com.`,
+    answer: `Najszybciej zarezerwujesz wizytę online: [Zarezerwuj w Booksy](${BOOKSY_URL}). Możesz też zadzwonić pod [+48 730 796 861](tel:+48730796861) lub napisać na [salonkwhd@gmail.com](mailto:salonkwhd@gmail.com).`,
   },
   {
     keywords: [
@@ -154,7 +155,7 @@ export const FAQ: FaqEntry[] = [
       "tanio",
     ],
     answer:
-      "Strzyżenie damskie kosztuje 190–260 zł, farbowanie ze strzyżeniem 440–520 zł, a strzyżenie męskie 120–150 zł. Ceny pozostałych usług (koloryzacje, balayage, pasemka, tonowanie, fryzury wieczorowe) znajdziesz na stronie Cennik — zależą od stylisty i długości włosów. Ceny dla Krystiana i Marioli dzielą się na Standard i VIP.",
+      `Strzyżenie damskie kosztuje ${priceRangeLabel("strzyzenie-damskie")}, farbowanie ze strzyżeniem ${priceRangeLabel("farbowanie")}, a strzyżenie męskie ${priceRangeLabel("strzyzenie-meskie")}. Ceny pozostałych usług (koloryzacje, balayage, pasemka, tonowanie, fryzury wieczorowe) znajdziesz w zakładce [cennik](/cennik/) — zależą od stylisty i długości włosów.`,
   },
   {
     keywords: [
@@ -170,7 +171,7 @@ export const FAQ: FaqEntry[] = [
       "krotsze wlosy",
     ],
     answer:
-      "Strzyżenie damskie: 190–260 zł. Strzyżenie męskie: 120–150 zł (zależnie od długości włosów). Strzyżenie dziecięce do 6 lat: 70–110 zł.",
+      `Strzyżenie damskie: ${priceRangeLabel("strzyzenie-damskie")}. Strzyżenie męskie: ${priceRangeLabel("strzyzenie-meskie")} (zależnie od długości włosów). Strzyżenie dziecięce do 6 lat: ${priceRangeLabel("strzyzenie-dzieciece")}.`,
   },
   {
     keywords: [
@@ -190,7 +191,7 @@ export const FAQ: FaqEntry[] = [
       "przefarbowac",
     ],
     answer:
-      "Koloryzacje (farbowanie, balayage, sombre/ombre, pasemka, rozjaśnianie, tonowanie) zaczynają się od ok. 130 zł za tonowanie do 530–570 zł za pełną koloryzację z pasemkami i strzyżeniem. W cenę koloryzacji wliczone jest strzyżenie i modelowanie. Dokładną cenę najlepiej ustalić podczas konsultacji (50 zł, odejmowane od ceny usługi).",
+      `Koloryzacje (farbowanie, balayage, sombre/ombre, pasemka, rozjaśnianie, tonowanie) zaczynają się ${lowestPriceLabel("tonowanie")} za tonowanie do 530–570 zł za pełną koloryzację z pasemkami i strzyżeniem. W cenę koloryzacji wliczone jest strzyżenie i modelowanie. Dokładną cenę najlepiej ustalić podczas konsultacji (50 zł, odejmowane od ceny usługi).`,
   },
   {
     keywords: [
@@ -202,7 +203,7 @@ export const FAQ: FaqEntry[] = [
       "fryzura meska",
     ],
     answer:
-      "Wykonujemy delikatną korektę i podcięcie brody (30–40 zł) oraz strzyżenie męskie (120–150 zł, zależnie od długości włosów). Nie wykonujemy zaawansowanych usług barberskich ani modelowania brody.",
+      `Wykonujemy delikatną korektę i podcięcie brody (${priceRangeLabel("broda")}) oraz strzyżenie męskie (${priceRangeLabel("strzyzenie-meskie")}, zależnie od długości włosów). Nie wykonujemy zaawansowanych usług barberskich ani modelowania brody.`,
   },
   {
     keywords: [
@@ -233,7 +234,7 @@ export const FAQ: FaqEntry[] = [
     answer: () =>
       `W naszym zespole pracuje ${team.length} osób: ${team
         .map((member) => `${member.name} ("${member.nickname}")`)
-        .join(", ")}. Profile każdej osoby znajdziesz na stronie Zespół.`,
+        .join(", ")}. Profile każdej osoby znajdziesz na stronie [zespół](/zespol/).`,
   },
   {
     keywords: [
@@ -272,7 +273,7 @@ export const FAQ: FaqEntry[] = [
       "suche wlosy",
     ],
     answer:
-      "Oferujemy zabiegi pielęgnacyjne i dobór kosmetyków (Olaplex, K18, Eleven Australia, Kevin Murphy) do regeneracji zniszczonych, suchych i osłabionych włosów. Zabieg pielęgnacyjny dodawany do usługi kosztuje 100–150 zł. Więcej wskazówek znajdziesz w naszych artykułach na blogu.",
+      "Oferujemy zabiegi pielęgnacyjne i dobór kosmetyków (Olaplex, K18, Eleven Australia, Kevin Murphy) do regeneracji zniszczonych, suchych i osłabionych włosów. Zabieg pielęgnacyjny dodawany do usługi kosztuje 100–150 zł. Więcej wskazówek znajdziesz w naszych artykułach na [blogu](/blog/).",
   },
   {
     keywords: [
@@ -288,7 +289,7 @@ export const FAQ: FaqEntry[] = [
       "podrazniona",
     ],
     answer:
-      "Pielęgnacja skóry głowy (suchej, przetłuszczającej się lub podrażnionej) to podstawa zdrowych włosów — dobieramy odpowiedni szampon i zabiegi indywidualnie. Praktyczne wskazówki znajdziesz w artykule \"Jak dbać o skórę głowy\" na naszym blogu.",
+      "Pielęgnacja skóry głowy (suchej, przetłuszczającej się lub podrażnionej) to podstawa zdrowych włosów — dobieramy odpowiedni szampon i zabiegi indywidualnie. Praktyczne wskazówki znajdziesz w artykule [Jak dbać o skórę głowy](/blog/jak-dbac-o-skore-glowy/).",
   },
   {
     keywords: [
@@ -302,7 +303,7 @@ export const FAQ: FaqEntry[] = [
       "czytac",
     ],
     answer:
-      "Na blogu znajdziesz artykuły: \"Kosmetyki do pielęgnacji zniszczonych włosów\", \"Jaka fryzura pasuje do mojej twarzy?\" oraz \"Jak dbać o skórę głowy\".",
+      "Na [blogu](/blog/) znajdziesz artykuły: [Kosmetyki do pielęgnacji zniszczonych włosów](/blog/kosmetyki-do-pielegnacji-zniszczonych-wlosow-lista-must-have/), [Jaka fryzura pasuje do mojej twarzy?](/blog/jaka-fryzura-pasuje-do-mojej-twarzy/) oraz [Jak dbać o skórę głowy](/blog/jak-dbac-o-skore-glowy/).",
   },
   {
     keywords: [
@@ -320,7 +321,7 @@ export const FAQ: FaqEntry[] = [
       "dobrac fryzure",
     ],
     answer:
-      "Dobór fryzury zależy od kształtu twarzy (okrągła, owalna, kwadratowa, trójkątna) — np. do twarzy okrągłej dobrze sprawdzają się dłuższe włosy bez mocnego cieniowania, a do trójkątnej klasyczny bob. Pełen przewodnik znajdziesz w artykule \"Jaka fryzura pasuje do mojej twarzy?\" na blogu, a najlepszą rekomendację dostaniesz podczas konsultacji u nas w salonie.",
+      "Dobór fryzury zależy od kształtu twarzy (okrągła, owalna, kwadratowa, trójkątna) — np. do twarzy okrągłej dobrze sprawdzają się dłuższe włosy bez mocnego cieniowania, a do trójkątnej klasyczny bob. Pełen przewodnik znajdziesz w artykule [Jaka fryzura pasuje do mojej twarzy?](/blog/jaka-fryzura-pasuje-do-mojej-twarzy/), a najlepszą rekomendację dostaniesz podczas konsultacji u nas w salonie.",
   },
   {
     keywords: [
@@ -333,7 +334,7 @@ export const FAQ: FaqEntry[] = [
       "mala",
     ],
     answer:
-      "Strzyżenie dziecięce dla dzieci poniżej 6 lat kosztuje 70–110 zł.",
+      `Strzyżenie dziecięce dla dzieci poniżej 6 lat kosztuje ${priceRangeLabel("strzyzenie-dzieciece")}.`,
   },
   {
     keywords: [
@@ -347,21 +348,10 @@ export const FAQ: FaqEntry[] = [
     answer:
       "Konsultacja kosztuje 50 zł, a jej koszt jest odejmowany od ceny usługi, jeśli zostanie zrealizowana w salonie. To dobry sposób, by dobrać fryzurę, kolor lub pielęgnację razem ze stylistą.",
   },
-  {
-    keywords: [
-      "vip",
-      "standard",
-      "cennik vip",
-      "różnica cennik",
-      "roznica cennik",
-    ],
-    answer:
-      "U Krystiana i Marioli obowiązują dwa cenniki: VIP — dla klientek z minimum jedną wizytą przed 1 sierpnia 2016, oraz STANDARD — dla nowych klientek i osób, których pierwsza wizyta odbyła się po tej dacie.",
-  },
 ];
 
 export const FALLBACK_ANSWER =
-  "Nie jestem pewien, jak odpowiedzieć na to pytanie. Zadzwoń do nas: +48 730 796 861, napisz na salonkwhd@gmail.com, albo zarezerwuj wizytę online przez Booksy.";
+  `Nie jestem pewien, jak odpowiedzieć na to pytanie. Zadzwoń do nas: [+48 730 796 861](tel:+48730796861), napisz na [salonkwhd@gmail.com](mailto:salonkwhd@gmail.com), albo [zarezerwuj wizytę w Booksy](${BOOKSY_URL}).`;
 
 export const GREETING =
-  "Cześć! Jestem asystentem Krystian Wojewoda Hair Design. Mogę pomóc w sprawach cennika, zespołu, godzin otwarcia, pielęgnacji i rezerwacji. O co chcesz zapytać?";
+  "Cześć! Jestem asystentem Krystian Wojewoda Hair Design. Mogę pomóc w sprawach [cennika](/cennik/), [zespołu](/zespol/), godzin otwarcia, pielęgnacji i rezerwacji. O co chcesz zapytać?";

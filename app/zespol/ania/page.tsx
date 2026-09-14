@@ -1,27 +1,43 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { BookingLink } from "@/components/ui/BookingLink";
 import { Container } from "@/components/ui/Container";
+import { BUSINESS } from "@/data/business";
+import { teamPhotoAlt } from "@/data/team";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { personSchema } from "@/lib/schema";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 
 import ania from "@/assets/images/ania.png";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Ania - Krystian Wojewoda Hair Design",
   description:
     "Ania, starsza stylistka z 25-letnim stażem w salonie Krystian Wojewoda Hair Design w Łodzi — specjalizuje się w koloryzacjach i klasycznych cięciach.",
-  alternates: { canonical: "/zespol/ania/" },
-};
+  path: "/zespol/ania/",
+});
 
 export default function AniaPage() {
   return (
     <main className="min-h-screen bg-black pt-32 text-white">
+      <JsonLd data={personSchema("ania", ania.src)} />
+
       <section className="relative overflow-hidden py-20">
         <div className="pointer-events-none absolute left-1/2 top-0 h-[700px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.045] blur-[150px]" />
 
         <Container>
           <AnimatedSection>
+            <Breadcrumbs
+              crumbs={[
+                { name: "Zespół", path: "/zespol/" },
+                { name: "Ania", path: "/zespol/ania/" },
+              ]}
+              className="mb-8 block"
+            />
+
             <Link
               href="/zespol"
               className="mb-12 inline-block text-xs font-black uppercase tracking-[0.35em] text-white/40 transition hover:text-white"
@@ -35,7 +51,7 @@ export default function AniaPage() {
               <div className="relative aspect-[400/420] w-full max-w-[300px] overflow-hidden rounded-[1.5rem] bg-neutral-900 md:max-w-[320px]">
                 <Image
                   src={ania}
-                  alt="Ania"
+                  alt={teamPhotoAlt("ania")}
                   fill
                   priority
                   className="object-cover object-center"
@@ -65,10 +81,10 @@ export default function AniaPage() {
                 </p>
 
                 <div className="mt-10 flex flex-wrap gap-4">
-                  <Button href="/kontakt">Umów wizytę</Button>
+                  <BookingLink size="lg" />
 
                   <a
-                    href="tel:+48730796861"
+                    href={`tel:${BUSINESS.phone}`}
                     className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-4 text-sm font-black uppercase transition hover:bg-white hover:text-black"
                   >
                     Zadzwoń
@@ -161,10 +177,10 @@ export default function AniaPage() {
                 </p>
 
                 <div className="mt-8 grid gap-4">
-                  <Button href="/kontakt">Umów wizytę</Button>
+                  <BookingLink size="lg" />
 
                   <a
-                    href="tel:+48730796861"
+                    href={`tel:${BUSINESS.phone}`}
                     className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-4 text-sm font-black uppercase transition hover:bg-white hover:text-black"
                   >
                     Zadzwoń

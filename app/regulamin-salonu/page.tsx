@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Regulamin salonu | Krystian Wojewoda Hair Design",
@@ -125,6 +126,11 @@ export default function RegulaminPage() {
       <section className="py-20">
         <Container>
           <div className="mb-16 max-w-4xl">
+            <Breadcrumbs
+              crumbs={[{ name: "Regulamin salonu", path: "/regulamin-salonu/" }]}
+              className="mb-8 block"
+            />
+
             <p className="mb-5 text-xs uppercase tracking-[0.55em] text-white/40">
               Informacje prawne
             </p>

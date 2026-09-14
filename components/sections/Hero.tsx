@@ -1,22 +1,54 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Phone, ArrowUpRight, MapPin } from "lucide-react";
 
 import logo from "@/assets/images/logo.png";
-import { heroPhoto } from "@/data/salon-gallery";
+import { salonPhotos } from "@/data/salon-gallery";
 import { BOOKSY_URL } from "@/data/navigation";
 
 /** Wysokość sticky headera — svh zamiast vh, bo na mobile pasek adresu chowa się i wraca. */
 const HERO_HEIGHT = "min-h-[calc(100svh-80px)]";
+
+/** Co ile milisekund zmienia się kadr w tle. */
+const SLIDE_INTERVAL_MS = 5000;
+
+/** Długość crossfade'u — dłuższa niż typowa animacja UI, żeby zmiana nie rozpraszała. */
+const SLIDE_FADE_S = 1.2;
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
 export function Hero() {
   const reduce = useReducedMotion();
+  /*
+    Licznik rośnie w nieskończoność, a kadr wybieramy dopiero przez modulo.
+    Dzięki temu `key` nigdy się nie powtarza — także po zapętleniu galerii —
+    więc AnimatePresence nie dostanie dwóch dzieci o tym samym kluczu, nawet
+    jeśli karta jest w tle i wygaszany kadr czeka na wznowienie animacji.
+  */
+  const [tick, setTick] = useState(0);
+
+  /*
+    Przy `prefers-reduced-motion` w ogóle nie zakładamy interwału — zostaje
+    pierwszy kadr. Zwracany cleanup kasuje timer przy odmontowaniu i przy
+    każdej zmianie `reduce`, więc nie zostaje wiszący interwał.
+  */
+  useEffect(() => {
+    if (reduce) return;
+
+    const timer = setInterval(
+      () => setTick((current) => current + 1),
+      SLIDE_INTERVAL_MS,
+    );
+
+    return () => clearInterval(timer);
+  }, [reduce]);
+
+  const photo = salonPhotos[tick % salonPhotos.length];
 
   return (
     <section
@@ -26,20 +58,43 @@ export function Hero() {
       <div aria-hidden className="absolute inset-0 bg-black" />
 
       {/*
-        Obraz LCP. W Next 16 `priority` jest zdeprecjonowane na rzecz `preload`,
-        które wstrzykuje <link rel="preload"> do <head>. `preload` samo ustawia
-        fetchPriority="high" — nie dublujemy go osobnym propem.
-        `placeholder="blur"` działa, bo `heroPhoto.src` to import statyczny.
+        Slideshow w tle: w danym momencie zamontowany jest tylko bieżący kadr,
+        a AnimatePresence trzyma poprzedni jeszcze przez czas wygaszania —
+        dzięki temu dostajemy crossfade zamiast przeskoku. Oba kadry leżą na
+        tym samym `absolute inset-0`, pod warstwami przyciemnienia i treścią.
+
+        Pierwsze zdjęcie jest elementem LCP. W Next 16 `priority` jest
+        zdeprecjonowane na rzecz `preload`, które wstrzykuje <link rel="preload">
+        do <head> i samo ustawia fetchPriority="high" — nie dublujemy go osobnym
+        propem — i tylko dla pierwszego renderu, żeby po zapętleniu nie wstrzykiwać
+        go ponownie. Kolejne kadry ładują się normalnie (domyślne `lazy`, czyli
+        w praktyce przy wejściu do DOM). `placeholder="blur"` działa, bo wszystkie
+        `src` to importy statyczne.
       */}
-      <Image
-        src={heroPhoto.src}
-        alt={heroPhoto.alt}
-        fill
-        preload
-        placeholder="blur"
-        sizes="100vw"
-        className="object-cover object-[center_45%] opacity-80"
-      />
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={tick}
+          aria-hidden
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: reduce ? 0 : SLIDE_FADE_S,
+            ease: "easeInOut",
+          }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={photo.src}
+            alt={photo.alt}
+            fill
+            preload={tick === 0}
+            placeholder="blur"
+            sizes="100vw"
+            className="object-cover object-[center_45%] opacity-80"
+          />
+        </motion.div>
+      </AnimatePresence>
 
       {/*
         Trzy warstwy przyciemnienia zamiast jednego globalnego zaciemnienia zdjęcia:
@@ -125,7 +180,7 @@ export function Hero() {
               className={`flex h-[82px] items-center justify-between gap-5 rounded-[1.35rem] border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 px-6 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl transition hover:border-sky-400/60 hover:from-sky-400/30 ${FOCUS_RING}`}
             >
               <p className="whitespace-nowrap text-[2rem] font-black leading-none tracking-[-0.05em]">
-                300+
+                460+
               </p>
 
               <p className="max-w-[135px] text-right text-xs leading-5 text-white/65">

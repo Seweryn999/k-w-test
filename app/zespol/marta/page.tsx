@@ -1,27 +1,43 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { BUSINESS } from "@/data/business";
+import { teamPhotoAlt } from "@/data/team";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { personSchema } from "@/lib/schema";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 
 import marta from "@/assets/images/marta.png";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Marta - Krystian Wojewoda Hair Design",
   description:
     "Marta, manager i recepcja salonu Krystian Wojewoda Hair Design w Łodzi — zadba o dogodny termin i sprawną organizację wizyty.",
-  alternates: { canonical: "/zespol/marta/" },
-};
+  path: "/zespol/marta/",
+});
 
 export default function MartaPage() {
   return (
     <main className="min-h-screen bg-black pt-32 text-white">
+      <JsonLd data={personSchema("marta", marta.src)} />
+
       <section className="relative overflow-hidden py-20">
         <div className="pointer-events-none absolute left-1/2 top-0 h-[700px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.045] blur-[150px]" />
 
         <Container>
           <AnimatedSection>
+            <Breadcrumbs
+              crumbs={[
+                { name: "Zespół", path: "/zespol/" },
+                { name: "Marta", path: "/zespol/marta/" },
+              ]}
+              className="mb-8 block"
+            />
+
             <Link
               href="/zespol"
               className="mb-12 inline-block text-xs font-black uppercase tracking-[0.35em] text-white/40 transition hover:text-white"
@@ -35,7 +51,7 @@ export default function MartaPage() {
               <div className="relative aspect-[400/420] w-full max-w-[300px] overflow-hidden rounded-[1.5rem] bg-neutral-900 md:max-w-[320px]">
                 <Image
                   src={marta}
-                  alt="Marta"
+                  alt={teamPhotoAlt("marta")}
                   fill
                   priority
                   className="object-cover object-center"
@@ -69,7 +85,7 @@ export default function MartaPage() {
                   <Button href="/kontakt">Skontaktuj się</Button>
 
                   <a
-                    href="tel:+48730796861"
+                    href={`tel:${BUSINESS.phone}`}
                     className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-4 text-sm font-black uppercase transition hover:bg-white hover:text-black"
                   >
                     Zadzwoń
@@ -188,7 +204,7 @@ export default function MartaPage() {
                 <Button href="/kontakt">Skontaktuj się</Button>
 
                 <a
-                  href="tel:+48730796861"
+                  href={`tel:${BUSINESS.phone}`}
                   className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-4 text-sm font-black uppercase transition hover:bg-white hover:text-black"
                 >
                   Zadzwoń

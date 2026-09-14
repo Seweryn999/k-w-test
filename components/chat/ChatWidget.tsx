@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
 
 import { GREETING } from "@/data/chatbot-faq";
+import { MessageText } from "@/components/chat/MessageText";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -67,7 +68,8 @@ export function ChatWidget() {
       className={
         isOpen
           ? "fixed inset-0 z-[1000] sm:inset-auto sm:bottom-6 sm:right-6"
-          : "fixed bottom-6 right-6 z-[1000]"
+          : // Na mobile dymek siedzi nad paskiem rezerwacji, nie na nim.
+            "fixed bottom-[86px] right-4 z-[1000] md:bottom-6 md:right-6"
       }
     >
       {isOpen && (
@@ -105,7 +107,11 @@ export function ChatWidget() {
                     : "bg-white/[0.06] text-white/85"
                 }`}
               >
-                {message.content}
+                {message.role === "assistant" ? (
+                  <MessageText>{message.content}</MessageText>
+                ) : (
+                  message.content
+                )}
               </div>
             ))}
 
