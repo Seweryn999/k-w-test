@@ -33,9 +33,9 @@ const SLIDE_FADE_S = 1.2;
 const SWIPE_OFFSET_PX = 60;
 const SWIPE_VELOCITY = 400;
 
-/** Kontener ma szerokość `Container` (max-w-7xl minus padding boczny). */
+/** Poniżej lg szerokość `Container`, od lg baner ma max 64rem (1024px). */
 const SIZES =
-  "(min-width: 1280px) 1216px, (min-width: 640px) calc(100vw - 64px), calc(100vw - 40px)";
+  "(min-width: 1088px) 1024px, (min-width: 640px) calc(100vw - 64px), calc(100vw - 40px)";
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
@@ -146,7 +146,13 @@ export function ZespolHero({ photos }: ZespolHeroProps) {
       onPointerMove={onPointerMove}
       onPointerDown={markInteraction}
       onFocus={markInteraction}
-      className="relative mb-16 overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] shadow-2xl shadow-black/50 md:mb-24"
+      /*
+        Od lg baner ma max 64rem szerokości i jest dodatkowo zwężany tak, żeby
+        przy 16:9 zmieścił się w wysokości okna: 15rem = odstęp od góry strony
+        (pt-32 + py-20) plus margines pod banerem. Na laptopie (np. MacBook,
+        okno ~790 px) cały baner razem z kropkami jest widoczny bez przewijania.
+      */
+      className="relative mx-auto mb-16 w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] shadow-2xl shadow-black/50 md:mb-24 lg:max-w-[min(64rem,calc((100svh_-_15rem)_*_16_/_9))]"
     >
       {/*
         aria-live: przy automatycznym przewijaniu wyłączone, żeby czytnik nie
