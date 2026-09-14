@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -21,6 +22,26 @@ const SLIDE_FADE_S = 1.2;
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+
+/*
+  Pionowe zdjęcie na szerokim ekranie zostaje przycięte do wąskiego poziomego
+  paska — dlatego na ekranach poziomych slideshow pokazuje tylko kadry poziome.
+  Pierwsze zdjęcie jest poziome, więc serwer (który orientacji nie zna i zakłada
+  poziomą) i telefon po hydratacji startują od tego samego kadru.
+*/
+const PORTRAIT_QUERY = "(orientation: portrait)";
+const landscapePhotos = salonPhotos.filter(
+  (photo) => photo.src.width > photo.src.height,
+);
+
+function subscribeOrientation(onChange: () => void) {
+  const query = window.matchMedia(PORTRAIT_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+const isPortrait = () => window.matchMedia(PORTRAIT_QUERY).matches;
+const isPortraitOnServer = () => false;
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -48,7 +69,13 @@ export function Hero() {
     return () => clearInterval(timer);
   }, [reduce]);
 
-  const photo = salonPhotos[tick % salonPhotos.length];
+  const portrait = useSyncExternalStore(
+    subscribeOrientation,
+    isPortrait,
+    isPortraitOnServer,
+  );
+  const photos = portrait ? salonPhotos : landscapePhotos;
+  const photo = photos[tick % photos.length];
 
   return (
     <section
@@ -84,6 +111,12 @@ export function Hero() {
           }}
           className="absolute inset-0"
         >
+          {/*
+            Punkt kadru przez zmienne CSS i wariant `landscape:` — orientację
+            rozstrzyga CSS już przy pierwszym malowaniu, bez czekania na JS.
+            Bez `opacity` na zdjęciu: same zdjęcia są ciemne, a czytelność
+            tekstu zapewniają nakładki poniżej.
+          */}
           <Image
             src={photo.src}
             alt={photo.alt}
@@ -91,29 +124,37 @@ export function Hero() {
             preload={tick === 0}
             placeholder="blur"
             sizes="100vw"
-            className="object-cover object-[center_45%] opacity-80"
+            style={
+              {
+                "--hero-pos-portrait": photo.heroPosition?.portrait ?? "50% 50%",
+                "--hero-pos-landscape":
+                  photo.heroPosition?.landscape ?? "50% 50%",
+              } as CSSProperties
+            }
+            className="object-cover object-[var(--hero-pos-portrait)] landscape:object-[var(--hero-pos-landscape)]"
           />
         </motion.div>
       </AnimatePresence>
 
       {/*
-        Trzy warstwy przyciemnienia zamiast jednego globalnego zaciemnienia zdjęcia:
-        1) poziomo — pod H1 i lidem po lewej,
-        2) pionowo — pod dolnym paskiem z adresem,
+        Trzy warstwy przyciemnienia, każda tylko tam, gdzie jest potrzebna:
+        1) pod tekstem — na mobile tekst zajmuje całą szerokość, więc równe
+           lekkie przyciemnienie; od lg tekst jest po lewej, więc gradient
+           wygasa do zera po prawej i zdjęcie zostaje tam w pełni widoczne,
+        2) dolna połowa — przejście w czarną sekcję poniżej i pod paskiem z adresem,
         3) górny cień — żeby menu było czytelne na jasnej części kadru.
-        Prawa strona zostaje najjaśniejsza, bo kafle mają własne tło i backdrop-blur.
       */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-r from-black via-black/72 to-black/25"
+        className="absolute inset-0 bg-black/40 lg:bg-transparent lg:bg-gradient-to-r lg:from-black/80 lg:via-black/35 lg:to-transparent"
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"
+        className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/30 to-transparent"
       />
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/75 to-transparent"
+        className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/60 to-transparent"
       />
 
       <motion.div
