@@ -50,7 +50,7 @@ const team = teamMembers
 export default function ZespolPage() {
   return (
     <main className="min-h-screen bg-black pt-32 text-white">
-      <section className="relative overflow-hidden py-20">
+      <section className="relative overflow-hidden pb-20 pt-10">
         <div className="pointer-events-none absolute left-1/2 top-0 h-[700px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.045] blur-[150px]" />
         <div className="pointer-events-none absolute -right-40 top-[700px] h-[600px] w-[600px] rounded-full bg-white/[0.03] blur-[130px]" />
 
