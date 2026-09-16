@@ -138,15 +138,17 @@ export function Hero() {
 
       {/*
         Trzy warstwy przyciemnienia, każda tylko tam, gdzie jest potrzebna:
-        1) pod tekstem — na mobile tekst zajmuje całą szerokość, więc równe
-           lekkie przyciemnienie; od lg tekst jest po lewej, więc gradient
-           wygasa do zera po prawej i zdjęcie zostaje tam w pełni widoczne,
+        1) pod tekstem — delikatny gradient od lewej. Kilka przystanków zamiast
+           trzech klas Tailwinda, żeby wygaszał się płynnie, bez widocznej
+           krawędzi. Na mobile tekst zajmuje całą szerokość, więc gradient
+           sięga dalej i nie schodzi do zera; od lg wygasa w ~2/3 szerokości
+           i prawa część zdjęcia zostaje w pełni widoczna,
         2) dolna połowa — przejście w czarną sekcję poniżej i pod paskiem z adresem,
         3) górny cień — żeby menu było czytelne na jasnej części kadru.
       */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-black/40 lg:bg-transparent lg:bg-gradient-to-r lg:from-black/80 lg:via-black/35 lg:to-transparent"
+        className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.42)_35%,rgba(0,0,0,0.3)_70%,rgba(0,0,0,0.22)_100%)] lg:bg-[linear-gradient(to_right,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.45)_22%,rgba(0,0,0,0.22)_42%,rgba(0,0,0,0.07)_56%,rgba(0,0,0,0)_68%)]"
       />
       <div
         aria-hidden

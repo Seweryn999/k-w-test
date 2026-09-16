@@ -39,44 +39,47 @@ export const salonPhotos: SalonPhoto[] = [
   {
     src: salon01,
     alt: "Rząd czarnych foteli fryzjerskich przy długim drewnianym blacie z lustrami",
-    // Drewniany blat biegnie przez środek i prawą część kadru.
-    heroPosition: { portrait: "58% 60%", landscape: "50% 62%" },
+    // Górę kadru zajmuje ciemny sufit — blat i fotele są w dolnych 2/3.
+    heroPosition: { portrait: "56% 65%", landscape: "50% 72%" },
   },
   {
     src: salon02,
     alt: "Ceglana ściana z drewnianym zegarem, lustra i myjnie fryzjerskie",
     // Zdjęcie pionowe — w Hero pokazywane tylko na pionowych ekranach.
-    heroPosition: { portrait: "50% 40%", landscape: "50% 40%" },
+    // Na telefonie przycinany tylko w poziomie — zegar jest na prawo od środka.
+    heroPosition: { portrait: "60% 50%", landscape: "60% 50%" },
   },
   {
     src: salon03,
     alt: "Wzorzysta podłoga, fotele przy blacie i myjnie w salonie fryzjerskim",
     // Zdjęcie pionowe — w Hero pokazywane tylko na pionowych ekranach.
-    heroPosition: { portrait: "45% 45%", landscape: "45% 45%" },
+    heroPosition: { portrait: "40% 50%", landscape: "40% 50%" },
   },
   {
     src: salon04,
     alt: "Podświetlony neon z nazwą salonu na ciemnej ceglanej ścianie",
     // Na telefonie mieści się tylko część napisu — pokazujemy „KRYSTIAN”.
-    heroPosition: { portrait: "30% 45%", landscape: "50% 45%" },
+    // Na desktopie odcinamy głównie ciemny dół, żeby neon nie wypadał w środku nagłówka.
+    heroPosition: { portrait: "26% 45%", landscape: "50% 38%" },
   },
   {
     src: salon05,
     alt: "Strefa myjni ze skórzanymi fotelami i kosmetykami do pielęgnacji włosów",
     // Myjnie na pierwszym planie, prawa-dolna część zdjęcia.
-    heroPosition: { portrait: "62% 70%", landscape: "50% 65%" },
+    heroPosition: { portrait: "62% 72%", landscape: "50% 72%" },
   },
   {
     src: salon07,
     alt: "Poczekalnia salonu ze skórzaną ławką, neonem i regałem z kosmetykami",
-    // Neon i skórzana ława po prawej; lewa część to ciemna ściana.
-    heroPosition: { portrait: "68% 50%", landscape: "55% 45%" },
+    // Neon i skórzana ława po prawej; lewa część to ciemna ściana. Neon jest
+    // wysoko, więc na desktopie przycinamy od dołu, a nie od góry.
+    heroPosition: { portrait: "80% 50%", landscape: "50% 30%" },
   },
   {
     src: salon08,
     alt: "Stanowiska fryzjerskie z lustrami i drewnianym zegarem w Ogrodach Geyera",
-    // Zegar i blat w centrum kadru.
-    heroPosition: { portrait: "48% 50%", landscape: "50% 50%" },
+    // Zegar u góry, blat w centrum — nie ucinamy zegara.
+    heroPosition: { portrait: "50% 45%", landscape: "50% 25%" },
   },
 ];
 
