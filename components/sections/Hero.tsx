@@ -10,15 +10,14 @@ import { Phone, ArrowUpRight, MapPin } from "lucide-react";
 import logo from "@/assets/images/logo.png";
 import { salonPhotos } from "@/data/salon-gallery";
 import { BOOKSY_URL } from "@/data/navigation";
+import {
+  SLIDE_EASE,
+  SLIDE_FADE_S,
+  SLIDE_INTERVAL_MS,
+} from "@/lib/slideshow";
 
 /** Wysokość sticky headera — svh zamiast vh, bo na mobile pasek adresu chowa się i wraca. */
 const HERO_HEIGHT = "min-h-[calc(100svh-80px)]";
-
-/** Co ile milisekund zmienia się kadr w tle. */
-const SLIDE_INTERVAL_MS = 5000;
-
-/** Długość crossfade'u — dłuższa niż typowa animacja UI, żeby zmiana nie rozpraszała. */
-const SLIDE_FADE_S = 1.2;
 
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
@@ -107,7 +106,7 @@ export function Hero() {
           exit={{ opacity: 0 }}
           transition={{
             duration: reduce ? 0 : SLIDE_FADE_S,
-            ease: "easeInOut",
+            ease: SLIDE_EASE,
           }}
           className="absolute inset-0"
         >
@@ -157,6 +156,21 @@ export function Hero() {
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/60 to-transparent"
+      />
+
+      {/*
+        Zlanie hero z sekcją poniżej. Bez tego dół hero jest prawie czarny
+        (warstwa 2 powyżej), a sekcja „O salonie” zaczyna się od --about-top,
+        czyli wyraźnie jaśniejszego szarego — na styku widać twardą linię.
+
+        Nakładka jest rodzeństwem slideshow'u, nie jego częścią, więc działa
+        tak samo dla każdego kadru. Leży nad zdjęciami, ale pod treścią
+        (`relative z-10` niżej), a `pointer-events-none` zostawia klikalne
+        przyciski i pasek z adresem, które w tę strefę sięgają.
+      */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(to_bottom,transparent_0%,var(--about-top)_100%)] sm:h-36 lg:h-44"
       />
 
       <motion.div

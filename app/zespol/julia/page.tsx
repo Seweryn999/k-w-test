@@ -11,7 +11,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { personSchema } from "@/lib/schema";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 
-import julia from "@/assets/images/julia.png";
+import julia from "@/assets/images/julia.webp";
 
 export const metadata: Metadata = pageMetadata({
   title: "Julia - Krystian Wojewoda Hair Design",
@@ -48,12 +48,12 @@ export default function JuliaPage() {
 
           <AnimatedSection>
             <div className="grid gap-10 rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 md:p-10 lg:grid-cols-[340px_1fr] lg:items-center">
-              <div className="relative aspect-[400/420] w-full max-w-[300px] overflow-hidden rounded-[1.5rem] bg-neutral-900 md:max-w-[320px]">
+              <div className="relative aspect-[4/5] w-full max-w-[300px] overflow-hidden rounded-[1.5rem] bg-neutral-900 md:max-w-[320px]">
                 <Image
                   src={julia}
                   alt={teamPhotoAlt("julia")}
                   fill
-                  priority
+                  preload
                   className="object-cover object-center"
                   sizes="320px"
                 />

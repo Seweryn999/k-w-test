@@ -3,6 +3,14 @@
 :root {
   --background: #030303;
   --foreground: #ffffff;
+
+  /*
+    Górny kolor sekcji „O salonie” — pierwszej pod hero na stronie głównej.
+    Trzymany tutaj, bo używają go dwa miejsca: sama sekcja i nakładka
+    wygaszająca dół hero. Gdyby kolor sekcji zmienił się w jednym miejscu,
+    a w drugim nie, na styku wróciłaby twarda krawędź.
+  */
+  --about-top: #3a3a3a;
 }
 
 html {

@@ -12,22 +12,25 @@ import {
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
 import type { TeamBannerPhoto } from "@/data/team-gallery";
+import {
+  SLIDE_EASE,
+  SLIDE_FADE_S,
+  SLIDE_INTERVAL_MS,
+} from "@/lib/slideshow";
 
 type ZespolHeroProps = {
   photos: TeamBannerPhoto[];
+  /** Duży napis na zdjęciach. Pominięty — baner zostaje bez nakładki z tekstem. */
+  title?: string;
+  /** Mniejszy nadtytuł nad `title`. Bez `title` nie jest pokazywany. */
+  eyebrow?: string;
 };
-
-/** Co ile milisekund zmienia się kadr. */
-const SLIDE_INTERVAL_MS = 5000;
 
 /**
  * Po tylu milisekundach bez interakcji (ruch myszy, klik, dotyk, klawiatura)
  * auto-przewijanie wraca samo; następny kadr pojawia się SLIDE_INTERVAL_MS później.
  */
 const IDLE_RESUME_MS = 3000;
-
-/** Długość crossfade'u — ta sama wartość co w slideshow na stronie głównej. */
-const SLIDE_FADE_S = 1.2;
 
 /** Minimalne przesunięcie (px) albo prędkość (px/s), od której swipe zmienia kadr. */
 const SWIPE_OFFSET_PX = 60;
@@ -43,7 +46,7 @@ const FOCUS_RING =
 const CONTROL =
   "rounded-full border border-white/20 bg-black/50 text-white/80 backdrop-blur-xl transition hover:border-white/50 hover:text-white";
 
-export function ZespolHero({ photos }: ZespolHeroProps) {
+export function ZespolHero({ photos, title, eyebrow }: ZespolHeroProps) {
   const reduce = useReducedMotion();
   const count = photos.length;
 
@@ -181,7 +184,7 @@ export function ZespolHero({ photos }: ZespolHeroProps) {
             exit={{ opacity: 0 }}
             transition={{
               duration: reduce ? 0 : SLIDE_FADE_S,
-              ease: "easeInOut",
+              ease: SLIDE_EASE,
             }}
             drag={count > 1 ? "x" : false}
             dragConstraints={{ left: 0, right: 0 }}
@@ -234,6 +237,41 @@ export function ZespolHero({ photos }: ZespolHeroProps) {
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"
         />
+
+        {/*
+          Napis na zdjęciach. Cała nakładka jest `pointer-events-none`, żeby
+          swipe i drag dalej łapały się na kadrze pod spodem.
+
+          Napis jest akapitem, nie nagłówkiem, celowo: tuż pod banerem stoi
+          H1 strony („Ludzie, którzy tworzą styl”). Drugi H1 albo H2 postawiony
+          przed H1 rozjechałby konspekt nagłówków, a sam baner ma już etykietę
+          regionu (`aria-label` na <section> powyżej). Czytnik ekranu i tak
+          przeczyta ten tekst w normalnej kolejności.
+
+          Czytelność: własne przyciemnienie pod tekstem (dolny gradient powyżej
+          rozjaśnia się już w połowie kadru, a napis stoi wyżej) plus cień
+          tekstu — ten sam zabieg co w H1 na stronie głównej.
+        */}
+        {title && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-16 pb-10 text-center sm:px-24">
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.3)_55%,rgba(0,0,0,0)_100%)]"
+            />
+
+            <div className="relative">
+              {eyebrow && (
+                <p className="mb-4 text-[0.6rem] uppercase tracking-[0.25em] text-white/70 [text-shadow:0_1px_12px_rgba(0,0,0,0.7)] sm:mb-6 sm:text-xs sm:tracking-[0.6em]">
+                  {eyebrow}
+                </p>
+              )}
+
+              <p className="text-3xl font-black uppercase leading-[0.9] tracking-[-0.03em] text-white [text-shadow:0_2px_30px_rgba(0,0,0,0.6)] sm:text-5xl lg:text-6xl">
+                {title}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {count > 1 && (

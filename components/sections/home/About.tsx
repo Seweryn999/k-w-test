@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/Container";
 
 export function About() {
   return (
-    <AnimatedSection className="bg-gradient-to-b from-[#3a3a3a] via-[#1f1f1f] to-[#101010] py-24 text-white">
+    <AnimatedSection className="bg-gradient-to-b from-[var(--about-top)] via-[#1f1f1f] to-[#101010] py-24 text-white">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
           <div>
