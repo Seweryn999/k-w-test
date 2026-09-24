@@ -3,12 +3,12 @@ import Image from "next/image";
 
 import background from "@/assets/images/salon-06.webp";
 
-import krystian from "@/assets/images/krystian.png";
-import mariola from "@/assets/images/mariola.png";
-import aneta from "@/assets/images/aneta.png";
-import ania from "@/assets/images/ania.png";
-import monika from "@/assets/images/monika.png";
-import marta from "@/assets/images/marta.png";
+import krystian from "@/assets/images/krystian.webp";
+import mariola from "@/assets/images/mariola.webp";
+import aneta from "@/assets/images/aneta.webp";
+import ania from "@/assets/images/ania.webp";
+import monika from "@/assets/images/monika.webp";
+import marta from "@/assets/images/marta.webp";
 
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Container } from "@/components/ui/Container";
@@ -82,7 +82,8 @@ export function Team() {
                     src={person.image}
                     alt={teamPhotoAlt(person.slug)}
                     fill
-                    className="object-cover opacity-80 transition duration-500 group-hover:scale-110 group-hover:opacity-100"
+                    sizes="(min-width: 1024px) 240px, (min-width: 640px) 16vw, 33vw"
+                    className="object-cover object-top opacity-80 transition duration-500 group-hover:scale-110 group-hover:opacity-100"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                 </div>

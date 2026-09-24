@@ -1,313 +1,192 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { KeyboardEvent, PointerEvent } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  type PanInfo,
-} from "framer-motion";
-import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import type { TeamBannerPhoto } from "@/data/team-gallery";
+import { SLIDE_EASE, SLIDE_FADE_S, SLIDE_INTERVAL_MS } from "@/lib/slideshow";
 
 type ZespolHeroProps = {
   photos: TeamBannerPhoto[];
+  /** Duży napis na zdjęciach. Pominięty — baner zostaje bez nakładki z tekstem. */
+  title?: string;
+  /** Mniejszy nadtytuł nad `title`. Bez `title` nie jest pokazywany. */
+  eyebrow?: string;
 };
 
-/** Co ile milisekund zmienia się kadr. */
-const SLIDE_INTERVAL_MS = 5000;
+/**
+ * Wysokość banera dopasowana do zdjęć zespołu (poziome, ok. 3:2), a nie do
+ * ekranu — przy `object-cover` każdy nadmiar wysokości lub szerokości to
+ * odcięty kawałek grupy.
+ *
+ * - telefon (< sm): 5:4 (`80vw`). Pełny ekran w pionie zostawiał ~1/3
+ *   szerokości zdjęcia, więc skrajne osoby wypadały z kadru; przy 5:4 widać
+ *   ~83% szerokości, a w pionie nic nie jest ucinane.
+ * - sm+: tyle, ile zdjęcie ma przy pełnej szerokości (`66.67vw` = 3:2), ale
+ *   nie więcej niż okno pod headerem (svh, bo na mobile pasek adresu chowa
+ *   się i wraca). Na ekranach szerszych niż 3:2 zostaje przycięcie z góry
+ *   i z dołu — tym steruje `position` przy każdym zdjęciu.
+ */
+const HERO_HEIGHT = "h-[80vw] sm:h-[min(calc(100svh-80px),66.67vw)]";
+
+/** Punkt kadru dla zdjęć bez własnego `position` — bliżej góry, bo tam są głowy. */
+const DEFAULT_POSITION = "50% 20%";
 
 /**
- * Po tylu milisekundach bez interakcji (ruch myszy, klik, dotyk, klawiatura)
- * auto-przewijanie wraca samo; następny kadr pojawia się SLIDE_INTERVAL_MS później.
+ * Baner na pełną szerokość na /zespol/ — bliźniak slideshow'u w tle Hero na stronie
+ * głównej: ten sam crossfade, ten sam interwał i easing (wszystkie trzy
+ * z `lib/slideshow`), ta sama konstrukcja na AnimatePresence, ten sam licznik
+ * z modulo.
+ *
+ * Kadry zmieniają się wyłącznie samoistnie — żadnych strzałek, kropek, pauzy
+ * ani swipe'a, dokładnie jak na stronie głównej. Z tego samego powodu nie ma
+ * tu `aria-live` ani ról karuzeli: nie ma czym sterować, więc nie ma czego
+ * ogłaszać.
  */
-const IDLE_RESUME_MS = 3000;
-
-/** Długość crossfade'u — ta sama wartość co w slideshow na stronie głównej. */
-const SLIDE_FADE_S = 1.2;
-
-/** Minimalne przesunięcie (px) albo prędkość (px/s), od której swipe zmienia kadr. */
-const SWIPE_OFFSET_PX = 60;
-const SWIPE_VELOCITY = 400;
-
-/** Poniżej lg szerokość `Container`, od lg baner ma max 72rem (1152px). */
-const SIZES =
-  "(min-width: 1216px) 1152px, (min-width: 640px) calc(100vw - 64px), calc(100vw - 40px)";
-
-const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
-
-const CONTROL =
-  "rounded-full border border-white/20 bg-black/50 text-white/80 backdrop-blur-xl transition hover:border-white/50 hover:text-white";
-
-export function ZespolHero({ photos }: ZespolHeroProps) {
+export function ZespolHero({ photos, title, eyebrow }: ZespolHeroProps) {
   const reduce = useReducedMotion();
   const count = photos.length;
 
   /*
-    `index` wybiera kadr, a `key` rośnie przy każdej zmianie. Szybkie
-    „wstecz → dalej" wraca do tego samego indeksu, zanim poprzedni kadr
-    zdąży się wygasić — gdyby kluczem był indeks, AnimatePresence dostałby
-    dwoje dzieci o tym samym kluczu.
+    Licznik rośnie w nieskończoność, a kadr wybieramy dopiero przez modulo —
+    tak samo jak w Hero. Dzięki temu `key` nigdy się nie powtarza, także po
+    zapętleniu galerii, więc AnimatePresence nie dostanie dwóch dzieci
+    o tym samym kluczu.
   */
-  const [slide, setSlide] = useState({ index: 0, key: 0 });
-  /*
-    Pauza trwa tylko w trakcie interakcji. Samo „bycie” kursora nad banerem
-    albo focus zostawiony na strzałce po kliknięciu nie blokuje karuzeli na
-    stałe — po IDLE_RESUME_MS bez żadnego zdarzenia przewijanie rusza dalej.
-  */
-  const [interacting, setInteracting] = useState(false);
-  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
-  /** Ręczna pauza przyciskiem — zostaje, dopóki użytkownik jej nie zdejmie. */
-  const [stopped, setStopped] = useState(false);
-
-  const markInteraction = useCallback(() => {
-    // Przy kolejnych zdarzeniach stan już jest `true`, więc React nie renderuje ponownie.
-    setInteracting(true);
-    clearTimeout(idleTimerRef.current);
-    idleTimerRef.current = setTimeout(
-      () => setInteracting(false),
-      IDLE_RESUME_MS,
-    );
-  }, []);
-
-  useEffect(() => () => clearTimeout(idleTimerRef.current), []);
-
-  const paused = interacting || stopped;
-  const autoplay = !reduce && !paused && count > 1;
-
-  const goTo = useCallback(
-    (next: number) =>
-      setSlide((current) => ({
-        index: (next + count) % count,
-        key: current.key + 1,
-      })),
-    [count],
-  );
+  const [tick, setTick] = useState(0);
 
   /*
-    Timeout zamiast interwału, zależny od `slide.key`: każda ręczna zmiana
-    kadru odlicza pełne 5 s od nowa, zamiast przeskoczyć chwilę po kliknięciu.
-    Przy `prefers-reduced-motion` timer w ogóle nie startuje — zostaje
-    pierwsze zdjęcie.
+    Przy `prefers-reduced-motion` w ogóle nie zakładamy interwału — zostaje
+    pierwszy kadr. Przy jednym zdjęciu nie ma czego przewijać. Zwracany
+    cleanup kasuje timer przy odmontowaniu, więc nie zostaje wiszący interwał.
   */
   useEffect(() => {
-    if (!autoplay) return;
+    if (reduce || count < 2) return;
 
-    const timer = setTimeout(() => goTo(slide.index + 1), SLIDE_INTERVAL_MS);
-    return () => clearTimeout(timer);
-  }, [autoplay, slide.key, slide.index, goTo]);
+    const timer = setInterval(
+      () => setTick((current) => current + 1),
+      SLIDE_INTERVAL_MS,
+    );
+
+    return () => clearInterval(timer);
+  }, [reduce, count]);
 
   if (count === 0) return null;
 
-  const photo = photos[slide.index];
-  const nextPhoto = photos[(slide.index + 1) % count];
-
-  const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    markInteraction();
-
-    if (event.key === "ArrowRight") {
-      event.preventDefault();
-      goTo(slide.index + 1);
-    } else if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      goTo(slide.index - 1);
-    }
-  };
-
-  // Ruch myszy nad banerem to „hover” — pauzuje, dopóki kursor się rusza.
-  // Na dotyku interakcję łapie `pointerdown` (tap, początek swipe'a).
-  const onPointerMove = (event: PointerEvent) => {
-    if (event.pointerType === "mouse") markInteraction();
-  };
-
-  const onDragEnd = (_: unknown, info: PanInfo) => {
-    if (info.offset.x < -SWIPE_OFFSET_PX || info.velocity.x < -SWIPE_VELOCITY) {
-      goTo(slide.index + 1);
-    } else if (
-      info.offset.x > SWIPE_OFFSET_PX ||
-      info.velocity.x > SWIPE_VELOCITY
-    ) {
-      goTo(slide.index - 1);
-    }
-  };
+  const photo = photos[tick % count];
+  const nextPhoto = photos[(tick + 1) % count];
 
   return (
     <section
-      role="region"
-      aria-roledescription="karuzela"
-      aria-label="Zdjęcia zespołu salonu"
-      onKeyDown={onKeyDown}
-      onPointerMove={onPointerMove}
-      onPointerDown={markInteraction}
-      onFocus={markInteraction}
-      /*
-        Od lg baner ma max 72rem szerokości (pełna szerokość `Container`) i jest
-        dodatkowo zwężany tak, żeby przy 16:9 zmieścił się w wysokości okna:
-        12.5rem = odstęp od góry strony (pt-32 + pt-10) plus margines pod
-        banerem. Na laptopie (np. MacBook, okno ~790 px) cały baner razem
-        z kropkami jest widoczny bez przewijania.
-      */
-      className="relative mx-auto mb-16 w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] shadow-2xl shadow-black/50 md:mb-24 lg:max-w-[min(72rem,calc((100svh_-_12.5rem)_*_16_/_9))]"
+      className={`relative mt-20 ${HERO_HEIGHT} w-full overflow-hidden bg-black text-white`}
     >
+      {/* Fallback pod obrazem — zapobiega białemu błyskowi przed dekodowaniem. */}
+      <div aria-hidden className="absolute inset-0 bg-black" />
+
       {/*
-        aria-live: przy automatycznym przewijaniu wyłączone, żeby czytnik nie
-        ogłaszał nowego kadru co 5 s; po pauzie — ogłasza ręczne zmiany.
+        Jak w Hero: zamontowany jest tylko bieżący kadr, a AnimatePresence
+        trzyma poprzedni przez czas wygaszania — crossfade zamiast przeskoku.
+
+        Pierwsze zdjęcie to element LCP strony. W Next 16 `priority` jest
+        zdeprecjonowane na rzecz `preload`, które wstrzykuje <link rel="preload">
+        i samo ustawia fetchPriority="high" — tylko dla pierwszego renderu, żeby
+        po zapętleniu nie wstrzykiwać go ponownie. `placeholder="blur"` działa,
+        bo wszystkie `src` to importy statyczne.
       */}
-      <div
-        aria-live={autoplay ? "off" : "polite"}
-        className="relative aspect-[4/3] w-full sm:aspect-[16/9]"
-      >
-        {/*
-          Tak jak w Hero: zamontowany jest tylko bieżący kadr, a AnimatePresence
-          trzyma poprzedni przez czas wygaszania — crossfade zamiast przeskoku.
-          `drag="x"` daje swipe na dotyku (framer ustawia `touch-action: pan-y`,
-          więc pionowe przewijanie strony dalej działa); kadr nie jedzie za
-          palcem, bo przejście jest crossfade'em, nie slajdem.
-        */}
-        <AnimatePresence initial={false}>
-          <motion.div
-            key={slide.key}
-            role="group"
-            aria-roledescription="slajd"
-            aria-label={`${slide.index + 1} z ${count}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: reduce ? 0 : SLIDE_FADE_S,
-              ease: "easeInOut",
-            }}
-            drag={count > 1 ? "x" : false}
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.12}
-            dragSnapToOrigin
-            onDragEnd={onDragEnd}
-            className="absolute inset-0 cursor-grab active:cursor-grabbing"
-          >
-            {/*
-              Pierwszy kadr to element LCP strony. W Next 16 `priority` jest
-              zdeprecjonowane na rzecz `preload` — tylko dla pierwszego renderu,
-              żeby po zapętleniu nie wstrzykiwać ponownie <link rel="preload">.
-              Kolejne kadry: domyślne `loading="lazy"`.
-            */}
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
-              preload={slide.key === 0}
-              placeholder="blur"
-              sizes={SIZES}
-              draggable={false}
-              className="pointer-events-none select-none object-cover"
-            />
-          </motion.div>
-        </AnimatePresence>
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={tick}
+          aria-hidden
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: reduce ? 0 : SLIDE_FADE_S,
+            ease: SLIDE_EASE,
+          }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={photo.src}
+            alt={photo.alt}
+            fill
+            preload={tick === 0}
+            placeholder="blur"
+            sizes="100vw"
+            className="object-cover"
+            style={{ objectPosition: photo.position ?? DEFAULT_POSITION }}
+          />
+        </motion.div>
+      </AnimatePresence>
 
-        {/*
-          Następny kadr renderowany poza widokiem (jak w Lightboxie), żeby był
-          już pobrany, gdy przyjdzie jego kolej — bez czarnego mignięcia w
-          połowie crossfade'u. `display: none` nie zadziała, bo część
-          przeglądarek pomija wtedy pobieranie.
-        */}
-        {count > 1 && (
-          <div
-            aria-hidden
-            className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0"
-          >
-            <Image
-              key={nextPhoto.src.src}
-              src={nextPhoto.src}
-              alt=""
-              sizes={SIZES}
-              loading="lazy"
-            />
-          </div>
-        )}
-
+      {/*
+        Następny kadr renderowany poza widokiem, żeby był już pobrany, gdy
+        przyjdzie jego kolej — bez czarnego mignięcia w połowie crossfade'u.
+        Na pełnym ekranie zdjęcie waży więcej niż w dawnym małym banerze, więc
+        tym bardziej się przydaje. `display: none` nie zadziała, bo część
+        przeglądarek pomija wtedy pobieranie.
+      */}
+      {count > 1 && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"
-        />
-      </div>
+          className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0"
+        >
+          <Image
+            key={nextPhoto.src.src}
+            src={nextPhoto.src}
+            alt=""
+            sizes="100vw"
+            loading="lazy"
+          />
+        </div>
+      )}
 
-      {count > 1 && (
-        <>
-          <button
-            type="button"
-            onClick={() => goTo(slide.index - 1)}
-            aria-label="Poprzednie zdjęcie"
-            className={`absolute left-3 top-1/2 z-10 -translate-y-1/2 p-2.5 sm:left-6 sm:p-3 ${CONTROL} ${FOCUS_RING}`}
-          >
-            <ChevronLeft size={22} aria-hidden />
-          </button>
+      {/*
+        Przyciemnienia, każde tam, gdzie jest potrzebne:
+        1) górny cień — żeby menu było czytelne na jasnej części kadru,
+        2) dolna połowa — zlanie z czarną sekcją kart zespołu poniżej,
+        3) plama pod napisem — zdjęcia zespołu są jasne (białe studio),
+           więc sam cień tekstu by nie wystarczył.
+      */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/60 to-transparent"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/40 to-transparent"
+      />
 
-          <button
-            type="button"
-            onClick={() => goTo(slide.index + 1)}
-            aria-label="Następne zdjęcie"
-            className={`absolute right-3 top-1/2 z-10 -translate-y-1/2 p-2.5 sm:right-6 sm:p-3 ${CONTROL} ${FOCUS_RING}`}
-          >
-            <ChevronRight size={22} aria-hidden />
-          </button>
+      {title && (
+        /*
+          Napis w dolnej części banera, nie na środku: twarze są w górnej
+          połowie kadru (tam go przesuwa `position`), a dół i tak ściemnia
+          gradient — tekst leży na nogach i podestach, nie na twarzach.
+        */
+        <div className="absolute inset-0 flex items-end justify-center px-6 pb-4 text-center sm:px-10 sm:pb-[5%]">
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_85%,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.25)_55%,rgba(0,0,0,0)_100%)]"
+          />
 
-          <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between gap-4 px-4 pb-4 sm:px-6 sm:pb-6">
-            <div
-              role="group"
-              aria-label="Wybierz zdjęcie"
-              className="flex items-center gap-1"
-            >
-              {photos.map((item, dot) => {
-                const active = dot === slide.index;
-
-                return (
-                  <button
-                    key={item.src.src}
-                    type="button"
-                    onClick={() => goTo(dot)}
-                    aria-label={`Pokaż zdjęcie ${dot + 1} z ${count}`}
-                    aria-current={active ? "true" : undefined}
-                    className={`group flex h-8 items-center px-1 ${FOCUS_RING} rounded-full`}
-                  >
-                    <span
-                      aria-hidden
-                      className={`block h-1.5 rounded-full transition-all duration-300 motion-reduce:transition-none ${
-                        active
-                          ? "w-8 bg-white"
-                          : "w-1.5 bg-white/40 group-hover:bg-white/70"
-                      }`}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-
-            {!reduce && (
-              <button
-                type="button"
-                onClick={() => setStopped((current) => !current)}
-                aria-label={
-                  stopped
-                    ? "Wznów automatyczne przewijanie"
-                    : "Zatrzymaj automatyczne przewijanie"
-                }
-                aria-pressed={stopped}
-                className={`p-2.5 ${CONTROL} ${FOCUS_RING}`}
-              >
-                {stopped ? (
-                  <Play size={16} aria-hidden />
-                ) : (
-                  <Pause size={16} aria-hidden />
-                )}
-              </button>
+          {/*
+            Napis jest akapitem, nie nagłówkiem, celowo: niżej na stronie stoi
+            H1 („Ludzie, którzy tworzą styl”). Drugi H1 albo H2 postawiony przed
+            H1 rozjechałby konspekt nagłówków.
+          */}
+          <div className="relative max-w-4xl">
+            {eyebrow && (
+              <p className="mb-3 text-[0.65rem] uppercase tracking-[0.3em] text-white/70 [text-shadow:0_1px_12px_rgba(0,0,0,0.7)] sm:mb-7 sm:text-xs sm:tracking-[0.6em]">
+                {eyebrow}
+              </p>
             )}
+
+            <p className="text-4xl font-black uppercase leading-[0.9] tracking-[-0.04em] [text-shadow:0_2px_30px_rgba(0,0,0,0.6)] sm:text-6xl lg:text-7xl xl:text-8xl">
+              {title}
+            </p>
           </div>
-        </>
+        </div>
       )}
     </section>
   );
