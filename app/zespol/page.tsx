@@ -54,18 +54,23 @@ const team = teamMembers
 
 export default function ZespolPage() {
   return (
-    <main className="min-h-screen bg-black pt-32 text-white">
-      <section className="relative overflow-hidden pb-20 pt-10">
+    /*
+      Bez `pt-32` na <main>: baner stoi poza `Container` i sam odsuwa się od
+      sticky headera (`mt-20`), tak jak hero na stronie głównej. Gdyby siedział
+      w kontenerze, nie miałby jak wyjść na pełną szerokość okna.
+    */
+    <main className="min-h-screen bg-black text-white">
+      <ZespolHero
+        photos={teamBannerPhotos}
+        eyebrow="Krystian Wojewoda Hair Design"
+        title="Poznaj nasz zespół"
+      />
+
+      <section className="relative overflow-hidden pb-20 pt-20">
         <div className="pointer-events-none absolute left-1/2 top-0 h-[700px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.045] blur-[150px]" />
         <div className="pointer-events-none absolute -right-40 top-[700px] h-[600px] w-[600px] rounded-full bg-white/[0.03] blur-[130px]" />
 
         <Container>
-          <ZespolHero
-            photos={teamBannerPhotos}
-            eyebrow="Krystian Wojewoda Hair Design"
-            title="Poznaj nasz zespół"
-          />
-
           <div className="relative mb-24 border-b border-white/10 pb-16">
             <Breadcrumbs
               crumbs={[{ name: "Zespół", path: "/zespol/" }]}
