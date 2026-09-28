@@ -7,6 +7,7 @@ export const BOOKSY_URL =
  * między zwykłymi linkami.
  */
 export const navigation = [
+  { label: "Usługi", href: "/uslugi" },
   { label: "Zespół", href: "/zespol" },
   { label: "Cennik", href: "/cennik" },
   { label: "Blog", href: "/blog" },

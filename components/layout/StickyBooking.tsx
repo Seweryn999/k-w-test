@@ -14,7 +14,7 @@ import { BOOKSY_URL } from "@/data/navigation";
 export function StickyBooking() {
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-[900] border-t border-white/10 bg-black/85 backdrop-blur-xl md:hidden"
+      className="fixed inset-x-0 bottom-0 z-[900] border-t border-white/10 bg-black/85 backdrop-blur-xl lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="flex items-center gap-3 px-4 py-3">
