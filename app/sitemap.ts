@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { blogPosts, postPath } from "@/data/blog";
+import { servicePath, services, SERVICES_PATH } from "@/data/services";
 import { team } from "@/data/team";
 import { SITE_URL } from "@/lib/seo";
 
@@ -27,6 +28,7 @@ type Entry = {
 const staticEntries: Entry[] = [
   { path: "/", priority: 1, changeFrequency: "weekly" },
   { path: "/cennik/", priority: 0.9, changeFrequency: "monthly" },
+  { path: SERVICES_PATH, priority: 0.9, changeFrequency: "monthly" },
   { path: "/kontakt/", priority: 0.9, changeFrequency: "monthly" },
   { path: "/zespol/", priority: 0.8, changeFrequency: "monthly" },
   { path: "/blog/", priority: 0.7, changeFrequency: "weekly" },
@@ -35,6 +37,13 @@ const staticEntries: Entry[] = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Strony usług to rdzeń klastra "usługa + Łódź" — zaraz pod stroną główną.
+  const serviceEntries: Entry[] = services.map((service) => ({
+    path: servicePath(service.slug),
+    priority: 0.8,
+    changeFrequency: "monthly",
+  }));
+
   const teamEntries: Entry[] = team.map((member) => ({
     path: `/zespol/${member.slug}/`,
     priority: 0.6,
@@ -50,7 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   return [
-    ...[...staticEntries, ...teamEntries].map((entry) => ({
+    ...[...staticEntries, ...serviceEntries, ...teamEntries].map((entry) => ({
       url: `${SITE_URL}${entry.path}`,
       changeFrequency: entry.changeFrequency,
       priority: entry.priority,
