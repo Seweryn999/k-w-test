@@ -10,8 +10,8 @@
  */
 
 /**
- * Etykieta usługi wyróżnianej poza cennikiem — na stronie głównej i w
- * odpowiedziach chatbota. Oznaczamy nią KAŻDY wiersz cennika dotyczący danej
+ * Etykieta usługi wyróżnianej poza cennikiem — na stronie głównej, na
+ * stronach usług (/uslugi/...) i w odpowiedziach chatbota. Oznaczamy nią KAŻDY wiersz cennika dotyczący danej
  * usługi (także z drugiego bloku cen), bo "od" ma znaczyć najniższą kwotę,
  * jaką klient faktycznie widzi w tabeli.
  */
@@ -23,7 +23,14 @@ export type PriceTag =
   | "balayage"
   | "pasemka"
   | "tonowanie"
-  | "broda";
+  | "broda"
+  | "airtouch"
+  | "upiecie"
+  | "upiecie-probne"
+  | "fale-hollywoodzkie"
+  | "zabieg-pielegnacyjny"
+  | "zabieg-enviro"
+  | "konsultacja";
 
 export type PriceRow = {
   service: string;
@@ -52,7 +59,7 @@ export const mainPrices: PriceRow[] = [
   { service: "Modelowanie", standard: "90–120", vip: "90–120" },
   { service: "Fale / Loki do usługi", standard: "100–120", vip: "90–100" },
   { service: "Cover + Strzyżenie **", standard: "360–420", vip: "330–390" },
-  { service: "Zabieg pielęgnacyjny do usługi", standard: "100–150", vip: "100–150" },
+  { service: "Zabieg pielęgnacyjny do usługi", standard: "100–150", vip: "100–150", tag: "zabieg-pielegnacyjny" },
   { service: "Strzyżenie męskie włosy krótkie", standard: "130", vip: "120", tag: "strzyzenie-meskie" },
   { service: "Strzyżenie męskie włosy długie", standard: "150", vip: "140", tag: "strzyzenie-meskie" },
   { service: "Broda ***", standard: "40", vip: "30", tag: "broda" },
@@ -62,7 +69,7 @@ export const mainPrices: PriceRow[] = [
   { service: "Pasemka + Strzyżenie **", standard: "390", vip: "360", tag: "pasemka" },
   { service: "Cover + Strzyżenie **", standard: "280", vip: "260" },
   { service: "Strzyżenie dziecięce <6 lat **", standard: "110", vip: "70", tag: "strzyzenie-dzieciece" },
-  { service: "Konsultacja *", standard: "50", vip: "–" },
+  { service: "Konsultacja *", standard: "50", vip: "–", tag: "konsultacja" },
 ];
 
 export const otherPrices: OtherPriceRow[] = [
@@ -73,20 +80,20 @@ export const otherPrices: OtherPriceRow[] = [
   { service: "Pasemka/Rozświetlenie + Strzyżenie **", price: "420–460", tag: "pasemka" },
   { service: "Farbowanie + Pasemka + Strzyżenie **", price: "470–510" },
   { service: "Rozjaśnianie + Farba + Strzyżenie **", price: "470–510" },
-  { service: "Refleksy Airtouch **", price: "650–750" },
+  { service: "Refleksy Airtouch **", price: "650–750", tag: "airtouch" },
   { service: "Demakijaż **", price: "130–150" },
   { service: "Modyfikacja **", price: "200–220" },
   { service: "Tonowanie **", price: "120–160", tag: "tonowanie" },
   { service: "Trwała", price: "430–490" },
   { service: "Modelowanie", price: "90–120" },
   { service: "Fale/Loki", price: "150–180" },
-  { service: "Fale Hollywoodzkie **", price: "200–250" },
-  { service: "Upięcie **", price: "350–400" },
-  { service: "Upięcie próbne", price: "300–350" },
+  { service: "Fale Hollywoodzkie **", price: "200–250", tag: "fale-hollywoodzkie" },
+  { service: "Upięcie **", price: "350–400", tag: "upiecie" },
+  { service: "Upięcie próbne", price: "300–350", tag: "upiecie-probne" },
   { service: "Cover + Strzyżenie", price: "330–390" },
-  { service: "Zabieg Pielęgnacyjny do usługi", price: "100–150" },
+  { service: "Zabieg Pielęgnacyjny do usługi", price: "100–150", tag: "zabieg-pielegnacyjny" },
   { service: "Pielęgnacja + Modelowanie", price: "150–240" },
-  { service: "Zabieg Enviro **", price: "350–450" },
+  { service: "Zabieg Enviro **", price: "350–450", tag: "zabieg-enviro" },
   { service: "Strzyżenie Męskie włosy krótkie", price: "100", tag: "strzyzenie-meskie" },
   { service: "Strzyżenie Męskie włosy długie", price: "120", tag: "strzyzenie-meskie" },
   { service: "Broda ***", price: "30", tag: "broda" },
@@ -97,7 +104,7 @@ export const otherPrices: OtherPriceRow[] = [
   { service: "Cover + Strzyżenie **", price: "250" },
   { service: "Strzyżenie Dziecięce <6 lat **", price: "70", tag: "strzyzenie-dzieciece" },
   { service: "Strzyżenie Dziecięce 6-12 lat **", price: "90" },
-  { service: "Konsultacja *", price: "–" },
+  { service: "Konsultacja *", price: "–", tag: "konsultacja" },
 ];
 
 /**
