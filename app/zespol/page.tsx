@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { ACCENT_TILE } from "@/components/ui/tile";
 import { Button } from "@/components/ui/Button";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { team as teamMembers, teamPhotoAlt } from "@/data/team";
+import { teamPhotos } from "@/data/team-photos";
 
 export const metadata: Metadata = pageMetadata({
   title: "Zespół - Krystian Wojewoda Hair Design",
@@ -15,42 +16,22 @@ export const metadata: Metadata = pageMetadata({
   path: "/zespol/",
 });
 
-import krystian from "@/assets/images/krystian.webp";
-import ania from "@/assets/images/ania.webp";
-import danuta from "@/assets/images/danuta.webp";
-import monika from "@/assets/images/monika.webp";
-import marta from "@/assets/images/marta.webp";
-import romina from "@/assets/images/romina.webp";
-import mariola from "@/assets/images/mariola.webp";
-import aneta from "@/assets/images/aneta.webp";
-import julia from "@/assets/images/julia.webp";
 
 import { ZespolHero } from "@/components/sections/ZespolHero";
 import { teamBannerPhotos } from "@/data/team-gallery";
 
-const images: Record<string, StaticImageData> = {
-  "krystian-wojewoda": krystian,
-  "mariola-snieg": mariola,
-  danuta,
-  aneta,
-  ania,
-  monika,
-  romina,
-  julia,
-  marta,
-};
 
 /*
-  Na liście pokazujemy tylko osoby z aktualnym portretem (.webp) w `images`.
+  Na liście pokazujemy tylko osoby z aktualnym portretem w `teamPhotos`.
   Kolejność kart bierze się z `data/team.ts` — tutaj decydujemy wyłącznie o tym,
   kto ma zdjęcie. Aneta i Julia mają już swoje .webp, więc wracają na swoje
   miejsca z `data/team.ts`, bez zmieniania kolejności reszty zespołu.
 */
 const team = teamMembers
-  .filter((member) => member.slug in images)
+  .filter((member) => member.slug in teamPhotos)
   .map((member) => ({
     ...member,
-    image: images[member.slug],
+    image: teamPhotos[member.slug],
   }));
 
 export default function ZespolPage() {

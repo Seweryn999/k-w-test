@@ -8,7 +8,8 @@ import { ACCENT_TILE, ACCENT_TILE_SOFT } from "@/components/ui/tile";
 import {
   mainPrices,
   otherPrices,
-  priceLegend,
+  priceLegendFor,
+  splitPriceMarker,
   pricingRules as rules,
 } from "@/data/pricing";
 
@@ -18,6 +19,55 @@ export const metadata: Metadata = pageMetadata({
     "Najlepszy fryzjer w Łodzi i okolicach ♛ Poznaj ceny usług fryzjerskich w salonie Krystian Wojewoda Hair Design: farbowanie, strzyżenie, modelowanie, balayage.",
   path: "/cennik/",
 });
+
+/**
+ * Gwiazdka widoczna tak jak w cenniku, a czytnik ekranu słyszy „przypis 2"
+ * — sam znak „**" bywa odczytywany jako „gwiazdka gwiazdka" albo pomijany.
+ */
+function Footnote({ symbol }: { symbol: string }) {
+  return (
+    <>
+      <span aria-hidden="true">{symbol}</span>
+      <span className="sr-only">przypis {symbol.length}</span>
+    </>
+  );
+}
+
+function ServiceName({ service }: { service: string }) {
+  const { name, marker } = splitPriceMarker(service);
+
+  return (
+    <>
+      {name}
+      {marker && (
+        <>
+          {" "}
+          <Footnote symbol={marker} />
+        </>
+      )}
+    </>
+  );
+}
+
+/** Legenda gwiazdek pod tabelą — tylko oznaczenia występujące w `rows`. */
+function PriceLegend({ rows }: { rows: { service: string }[] }) {
+  const legend = priceLegendFor(rows);
+
+  if (legend.length === 0) return null;
+
+  return (
+    <dl className="mt-5 grid gap-2 px-4 text-xs leading-5 text-white/50 md:px-8 md:text-sm md:leading-6">
+      {legend.map(({ symbol, description }) => (
+        <div key={symbol} className="flex gap-3">
+          <dt className="w-6 shrink-0 font-black text-white/75">
+            <Footnote symbol={symbol} />
+          </dt>
+          <dd>{description}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
 
 export default function CennikPage() {
   return (
@@ -76,7 +126,7 @@ export default function CennikPage() {
                 className="grid grid-cols-[1fr_90px] items-center border-b border-white/10 px-4 py-5 transition hover:bg-white/[0.04] md:grid-cols-[1fr_150px] md:px-8"
               >
                 <div className="pr-4 text-sm font-bold uppercase leading-6 text-white/80 md:text-base">
-                  {service}
+                  <ServiceName service={service} />
                 </div>
 
                 <div className="text-right text-sm font-black text-white md:text-lg">
@@ -85,6 +135,8 @@ export default function CennikPage() {
               </div>
             ))}
           </div>
+
+          <PriceLegend rows={mainPrices} />
 
           <div className={`mb-12 mt-20 rounded-[2rem] p-6 md:p-10 ${ACCENT_TILE}`}>
             <p className="text-xs uppercase tracking-[0.45em] text-white/55">
@@ -113,7 +165,7 @@ export default function CennikPage() {
                 className="grid grid-cols-[1fr_90px] items-center border-b border-white/10 px-4 py-5 transition hover:bg-white/[0.04] md:grid-cols-[1fr_150px] md:px-8"
               >
                 <div className="pr-4 text-sm font-bold uppercase leading-6 text-white/80 md:text-base">
-                  {service}
+                  <ServiceName service={service} />
                 </div>
 
                 <div className="text-right text-sm font-black text-white md:text-lg">
@@ -124,21 +176,11 @@ export default function CennikPage() {
           </div>
 
           {/*
-            Legenda gwiazdek z obu tabel. Lista budowana z danych cennika,
-            więc pokazuje tylko oznaczenia, które faktycznie w nim występują.
+            Legenda pod każdą tabelą osobno: obie są długie i rozdziela je
+            duży nagłówek, więc wspólny blok pod drugą byłby poza ekranem
+            dla kogoś, kto czyta pierwszą.
           */}
-          {priceLegend.length > 0 && (
-            <dl className="mt-6 grid gap-2 px-4 text-xs leading-6 text-white/50 md:px-8 md:text-sm">
-              {priceLegend.map(({ symbol, description }) => (
-                <div key={symbol} className="flex gap-3">
-                  <dt className="w-7 shrink-0 font-black text-white/75">
-                    {symbol}
-                  </dt>
-                  <dd>{description}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+          <PriceLegend rows={otherPrices} />
 
           <div className={`mt-12 overflow-hidden rounded-[2rem] ${ACCENT_TILE}`}>
             <div className="grid gap-0 lg:grid-cols-[1fr_auto]">

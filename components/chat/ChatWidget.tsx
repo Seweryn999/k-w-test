@@ -68,8 +68,9 @@ export function ChatWidget() {
       className={
         isOpen
           ? "fixed inset-0 z-[1000] sm:inset-auto sm:bottom-6 sm:right-6"
-          : // Na mobile dymek siedzi nad paskiem rezerwacji, nie na nim.
-            "fixed bottom-[86px] right-4 z-[1000] md:bottom-6 md:right-6"
+          : // Na mobile dymek siedzi nad paskiem rezerwacji, nie na nim —
+            // pasek rośnie o safe-area na iPhonie, więc dymek też.
+            "fixed bottom-[calc(86px+env(safe-area-inset-bottom))] right-4 z-[1000] md:bottom-6 md:right-6"
       }
     >
       {isOpen && (

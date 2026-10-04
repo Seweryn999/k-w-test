@@ -163,53 +163,55 @@ export const priceHighlights: { service: string; price: string }[] = (
 ).map(({ service, tag }) => ({ service, price: lowestPriceLabel(tag) }));
 
 /**
- * Objaśnienia gwiazdek dopisanych do nazw usług w cenniku. Strona salonu
- * nigdzie ich nie objaśniała, więc opisy wyprowadzone są z `pricingRules`:
- *
- * - `*`   stoi wyłącznie przy „Konsultacja" → zasada o konsultacji za 50 zł.
- * - `***` stoi wyłącznie przy „Broda" → zasada o korekcie brody.
- * - `**`  stoi przy koloryzacjach, ale też przy demakijażu, upięciu,
- *         strzyżeniu dziecięcym czy zabiegu Enviro, a nie stoi np. przy
- *         „Farbowanie odrostu + Strzyżenie" — z treści nie da się ustalić,
- *         co oznacza.
- *
- * TODO(Krystian): potwierdzić znaczenie `**` (oraz dla pewności `*` i `***`).
- * Do tego czasu `**` opisuje neutralna zasada nr 4 z regulaminu cennika,
- * która i tak dotyczy wszystkich usług.
+ * Objaśnienia gwiazdek dopisanych do nazw usług w cenniku (treść potwierdzona
+ * przez salon). Pokrywają się z punktami 06, 04 i 08 „Zasad cennika", ale
+ * w legendzie stoją przy samych tabelach, żeby gwiazdkę dało się od razu
+ * dopasować do opisu.
  */
-const priceMarkerDescriptions: Record<string, string> = {
-  "*": "Koszt konsultacji jest w całości odejmowany od ceny zrealizowanej usługi.",
+const priceFootnotes: Record<string, string> = {
+  "*": "Konsultacja kosztuje 50 zł — kwota w całości odejmowana jest przy zrealizowanej usłudze.",
   "**": "Ostateczna cena zależy od długości i gęstości włosa, zużycia materiału oraz trudności wykonania.",
-  "***": "Wykonujemy jedynie delikatną korektę i podcięcie brody, bez usług barberskich.",
+  "***": "Wykonujemy jedynie delikatną korektę i podcięcie brody. Nie wykonujemy usług barberskich ani zaawansowanego modelowania brody.",
 };
 
-/** Gwiazdka (lub kilka) na końcu nazwy usługi, np. "Broda ***" → "***". */
-function markerOf(service: string): string | undefined {
-  return service.match(/(\*+)\s*$/)?.[1];
+/**
+ * Rozdziela nazwę usługi i gwiazdkę z jej końca, np. "Broda ***" →
+ * { name: "Broda", marker: "***" }. Nazwy w danych zostają bez zmian —
+ * czyta je też chatbot.
+ */
+export function splitPriceMarker(service: string): {
+  name: string;
+  marker?: string;
+} {
+  const match = service.match(/^(.*?)\s*(\*+)\s*$/);
+
+  return match ? { name: match[1], marker: match[2] } : { name: service };
 }
 
 /**
- * Legenda pod cennikiem — tylko te oznaczenia, które faktycznie występują
- * w tabelach, od najkrótszego. Gwiazdka bez opisu zatrzymuje build, żeby
- * nowe oznaczenie nie trafiło na stronę bez wyjaśnienia.
+ * Legenda dla jednej tabeli: tylko gwiazdki, które w niej występują, od
+ * najkrótszej. Gwiazdka bez opisu zatrzymuje build, żeby nowe oznaczenie
+ * nie trafiło na stronę bez wyjaśnienia.
  */
-export const priceLegend: { symbol: string; description: string }[] = [
-  ...new Set(
-    [...mainPrices, ...otherPrices]
-      .map((row) => markerOf(row.service))
-      .filter((marker): marker is string => Boolean(marker)),
-  ),
-]
-  .sort((a, b) => a.length - b.length)
-  .map((symbol) => {
-    const description = priceMarkerDescriptions[symbol];
+export function priceLegendFor(
+  rows: { service: string }[],
+): { symbol: string; description: string }[] {
+  const symbols = new Set(
+    rows.flatMap((row) => splitPriceMarker(row.service).marker ?? []),
+  );
 
-    if (!description) {
-      throw new Error(`Brak objaśnienia oznaczenia "${symbol}" w legendzie cennika`);
-    }
+  return [...symbols]
+    .sort((a, b) => a.length - b.length)
+    .map((symbol) => {
+      const description = priceFootnotes[symbol];
 
-    return { symbol, description };
-  });
+      if (!description) {
+        throw new Error(`Brak objaśnienia oznaczenia "${symbol}" w legendzie cennika`);
+      }
+
+      return { symbol, description };
+    });
+}
 
 export const pricingRules: string[] = [
   "Fryzury wieczorowe, ślubne i weselne upina jedynie Aneta i Monika.",
