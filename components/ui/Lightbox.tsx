@@ -135,7 +135,7 @@ export function Lightbox({
             type="button"
             onClick={onClose}
             aria-label="Zamknij galerię"
-            className="absolute right-4 top-4 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 sm:right-8 sm:top-8"
+            className="absolute right-4 top-4 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 sm:right-8 sm:top-8"
           >
             <X size={20} />
           </button>
@@ -144,7 +144,7 @@ export function Lightbox({
             type="button"
             onClick={() => goTo((index ?? 0) - 1)}
             aria-label="Poprzednie zdjęcie"
-            className="absolute left-3 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 sm:left-8"
+            className="absolute left-3 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 sm:left-8"
           >
             <ChevronLeft size={22} />
           </button>
@@ -153,7 +153,7 @@ export function Lightbox({
             type="button"
             onClick={() => goTo((index ?? 0) + 1)}
             aria-label="Następne zdjęcie"
-            className="absolute right-3 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 sm:right-8"
+            className="absolute right-3 z-10 rounded-full border border-white/20 bg-black/50 p-3 text-white/80 transition hover:border-white/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 sm:right-8"
           >
             <ChevronRight size={22} />
           </button>

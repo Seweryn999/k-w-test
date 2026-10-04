@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/*
+  Niebieski akcent kafelków — jedno miejsce dla całej witryny (strona główna
+  i podstrony). Generuje klasy typu `border-accent/30`, `from-accent/20`,
+  `text-accent-soft/40`. Wartości odpowiadają sky-400 / sky-500 / sky-300,
+  na których akcent był wcześniej wpisany ręcznie w każdym komponencie.
+*/
+@theme {
+  --color-accent: oklch(74.6% 0.16 232.661);
+  --color-accent-strong: oklch(68.5% 0.169 237.323);
+  --color-accent-soft: oklch(82.8% 0.111 230.318);
+}
+
 :root {
   --background: #030303;
   --foreground: #ffffff;

@@ -1,14 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, ArrowDown } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { BOOKSY_URL, navigation } from "@/data/navigation";
+import logo from "@/assets/images/logo.png";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
 
 /** Wspólna typografia dla wszystkich pozycji menu — podstron i sekcji. */
 const NAV_ITEM =
@@ -102,78 +105,104 @@ export function MobileMenu() {
         <Menu size={28} aria-hidden />
       </button>
 
-      {isOpen && (
-        <div
-          id="mobile-menu"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menu główne"
-          className="fixed inset-0 z-[999999] isolate bg-black text-white"
-        >
-          <div aria-hidden className="absolute inset-0 z-0 bg-black" />
+      {/*
+        Portal do <body>: nagłówek ma `z-50` i `backdrop-blur`, więc tworzy
+        własny kontekst stosu i staje się blokiem zawierającym dla `fixed`.
+        Menu renderowane w nim miało wysokość nagłówka i przegrywało z paskiem
+        rezerwacji (z-900) i dymkiem czatu (z-1000), które wystawały na dole.
+        Z <body> menu przykrywa oba, więc widać tylko jego własny przycisk.
+      */}
+      {isOpen &&
+        createPortal(
+          <div
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu główne"
+            className="fixed inset-0 z-[999999] isolate h-dvh overflow-y-auto overscroll-contain bg-black text-white md:hidden"
+          >
+            <div aria-hidden className="absolute inset-0 z-0 bg-black" />
 
-          <div className="relative z-10 flex min-h-dvh flex-col bg-black">
-            <div className="flex items-center justify-between border-b border-white/10 px-7 py-5">
-              <div className="flex h-11 w-11 items-center justify-center border border-white/40 text-sm font-bold tracking-[0.25em]">
-                KW
+            {/* min-h-full + przewijany rodzic: na niskich ekranach menu się przewija. */}
+            <div className="relative z-10 flex min-h-full flex-col bg-black">
+              <div className="flex items-center justify-between border-b border-white/10 px-7 py-5">
+                {/* To samo logo i rozmiar co w nagłówku — menu nie zmienia „marki" w rogu. */}
+                <Link
+                  href="/"
+                  onClick={close}
+                  className={`rounded ${FOCUS_RING}`}
+                >
+                  <Image
+                    src={logo}
+                    alt="Krystian Wojewoda Hair Design – strona główna"
+                    width={72}
+                    height={48}
+                    className="h-auto w-[72px]"
+                  />
+                </Link>
+
+                <button
+                  ref={closeButtonRef}
+                  type="button"
+                  onClick={close}
+                  aria-label="Zamknij menu"
+                  className={`rounded-full p-1 text-white ${FOCUS_RING}`}
+                >
+                  <X size={30} aria-hidden />
+                </button>
               </div>
 
-              <button
-                ref={closeButtonRef}
-                type="button"
-                onClick={close}
-                aria-label="Zamknij menu"
-                className={`rounded-full p-1 text-white ${FOCUS_RING}`}
-              >
-                <X size={30} aria-hidden />
-              </button>
-            </div>
+              <nav className="flex flex-1 flex-col justify-center px-7">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={close}
+                    className={`${NAV_ITEM} ${FOCUS_RING}`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
 
-            <nav className="flex flex-1 flex-col justify-center px-7">
-              {navigation.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={close}
-                  className={`${NAV_ITEM} ${FOCUS_RING}`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-
-              {/*
+                {/*
                 Opinie to sekcja strony głównej, nie podstrona — ta sama
                 typografia co reszta, ale strzałka w dół sygnalizuje, że
                 link przewija, a nie przenosi na nowy adres.
               */}
-              <Link
-                href="/#opinie"
-                onClick={goToOpinie}
-                className={`${NAV_ITEM} text-white/75 ${FOCUS_RING}`}
-              >
-                Opinie
-                <ArrowDown
-                  size={20}
-                  aria-hidden
-                  className="shrink-0 text-white/35"
-                />
-              </Link>
-            </nav>
+                <Link
+                  href="/#opinie"
+                  onClick={goToOpinie}
+                  className={`${NAV_ITEM} text-white/75 ${FOCUS_RING}`}
+                >
+                  Opinie
+                  <ArrowDown
+                    size={20}
+                    aria-hidden
+                    className="shrink-0 text-white/35"
+                  />
+                </Link>
+              </nav>
 
-            <div className="border-t border-white/10 px-7 pb-8 pt-5">
-              <a
-                href={BOOKSY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={close}
-                className={`flex h-14 w-full items-center justify-center rounded-full bg-white text-sm font-bold uppercase tracking-[0.25em] text-black transition hover:bg-white/90 ${FOCUS_RING}`}
+              <div
+                className="border-t border-white/10 px-7 pt-5"
+                style={{
+                  paddingBottom: "calc(2rem + env(safe-area-inset-bottom))",
+                }}
               >
-                Umów wizytę
-              </a>
+                <a
+                  href={BOOKSY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={close}
+                  className={`flex h-14 w-full items-center justify-center rounded-full bg-white text-sm font-bold uppercase tracking-[0.25em] text-black transition hover:bg-white/90 ${FOCUS_RING}`}
+                >
+                  Umów wizytę
+                </a>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

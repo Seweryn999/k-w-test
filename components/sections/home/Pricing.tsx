@@ -41,7 +41,7 @@ export function Pricing() {
             {priceHighlights.map((item) => (
               <div
                 key={item.service}
-                className="flex items-center justify-between gap-4 rounded-2xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 px-6 py-4"
+                className="flex items-center justify-between gap-4 rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 px-6 py-4"
               >
                 <p className="text-sm font-bold uppercase leading-5 text-white/75 md:text-base">
                   {item.service}

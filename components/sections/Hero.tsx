@@ -20,7 +20,7 @@ import {
 const HERO_HEIGHT = "min-h-[calc(100svh-80px)]";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
 /*
   Pionowe zdjęcie na szerokim ekranie zostaje przycięte do wąskiego poziomego
@@ -234,7 +234,7 @@ export function Hero() {
           <div className="grid gap-3">
             <Link
               href="/#opinie"
-              className={`flex h-[82px] items-center justify-between gap-5 rounded-[1.35rem] border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 px-6 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl transition hover:border-sky-400/60 hover:from-sky-400/30 ${FOCUS_RING}`}
+              className={`flex h-[82px] items-center justify-between gap-5 rounded-[1.35rem] border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 px-6 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl transition hover:border-accent/60 hover:from-accent/30 ${FOCUS_RING}`}
             >
               <p className="whitespace-nowrap text-[2rem] font-black leading-none tracking-[-0.05em]">
                 460+
@@ -245,7 +245,7 @@ export function Hero() {
               </p>
             </Link>
 
-            <div className="flex h-[82px] items-center justify-between gap-5 rounded-[1.35rem] border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 px-6 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">
+            <div className="flex h-[82px] items-center justify-between gap-5 rounded-[1.35rem] border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 px-6 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">
               <p className="whitespace-nowrap text-[2rem] font-black leading-none tracking-[-0.06em]">
                 1996
               </p>
@@ -257,7 +257,7 @@ export function Hero() {
 
             <a
               href="tel:+48730796861"
-              className={`group flex h-[82px] items-center justify-between gap-5 rounded-[1.35rem] border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 px-6 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl transition hover:border-sky-400/60 hover:from-sky-400/30 ${FOCUS_RING}`}
+              className={`group flex h-[82px] items-center justify-between gap-5 rounded-[1.35rem] border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 px-6 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl transition hover:border-accent/60 hover:from-accent/30 ${FOCUS_RING}`}
             >
               <div>
                 <p className="flex items-center gap-2 text-[0.68rem] uppercase tracking-[0.14em] text-white/50">

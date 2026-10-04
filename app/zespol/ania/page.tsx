@@ -4,14 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookingLink } from "@/components/ui/BookingLink";
 import { Container } from "@/components/ui/Container";
+import { ACCENT_TILE } from "@/components/ui/tile";
 import { BUSINESS } from "@/data/business";
 import { teamPhotoAlt } from "@/data/team";
+import { teamPhoto } from "@/data/team-photos";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { personSchema } from "@/lib/schema";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 
-import ania from "@/assets/images/ania.png";
 
 export const metadata: Metadata = pageMetadata({
   title: "Ania - Krystian Wojewoda Hair Design",
@@ -23,7 +24,7 @@ export const metadata: Metadata = pageMetadata({
 export default function AniaPage() {
   return (
     <main className="min-h-screen bg-black pt-32 text-white">
-      <JsonLd data={personSchema("ania", ania.src)} />
+      <JsonLd data={personSchema("ania", teamPhoto("ania").src)} />
 
       <section className="relative overflow-hidden py-20">
         <div className="pointer-events-none absolute left-1/2 top-0 h-[700px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.045] blur-[150px]" />
@@ -48,14 +49,15 @@ export default function AniaPage() {
 
           <AnimatedSection>
             <div className="grid gap-10 rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 md:p-10 lg:grid-cols-[340px_1fr] lg:items-center">
-              <div className="relative aspect-[400/420] w-full max-w-[300px] overflow-hidden rounded-[1.5rem] bg-neutral-900 md:max-w-[320px]">
+              <div className="relative aspect-[4/5] w-full max-w-[300px] overflow-hidden rounded-[1.5rem] bg-neutral-900 md:max-w-[320px]">
+                {/* Portret 4:5 jak na karcie w /zespol; kadr ma maks. 300 px (od md 320 px). */}
                 <Image
-                  src={ania}
+                  src={teamPhoto("ania")}
                   alt={teamPhotoAlt("ania")}
                   fill
-                  priority
+                  preload
                   className="object-cover object-center"
-                  sizes="320px"
+                  sizes="(min-width: 768px) 320px, 300px"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
@@ -163,8 +165,8 @@ export default function AniaPage() {
                 </p>
               </div>
 
-              <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 md:p-10">
-                <p className="text-xs uppercase tracking-[0.45em] text-white/35">
+              <div className={`rounded-[2rem] p-8 md:p-10 ${ACCENT_TILE}`}>
+                <p className="text-xs uppercase tracking-[0.45em] text-white/55">
                   Wizyta
                 </p>
 
@@ -172,7 +174,7 @@ export default function AniaPage() {
                   Chcesz umówić wizytę?
                 </h2>
 
-                <p className="mt-6 text-lg leading-8 text-white/55">
+                <p className="mt-6 text-lg leading-8 text-white/65">
                   Skontaktuj się z salonem i zapytaj o dostępne terminy do Ani.
                 </p>
 

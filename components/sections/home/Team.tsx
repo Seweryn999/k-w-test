@@ -3,34 +3,29 @@ import Image from "next/image";
 
 import background from "@/assets/images/salon-06.webp";
 
-import krystian from "@/assets/images/krystian.webp";
-import mariola from "@/assets/images/mariola.webp";
-import aneta from "@/assets/images/aneta.webp";
-import ania from "@/assets/images/ania.webp";
-import monika from "@/assets/images/monika.webp";
-import marta from "@/assets/images/marta.webp";
 
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Container } from "@/components/ui/Container";
 import { teamPhotoAlt } from "@/data/team";
+import { teamPhoto } from "@/data/team-photos";
 
 const team = [
   {
     name: "Krystian Wojewoda",
     role: "Stylista / Fryzjer",
-    image: krystian,
+    image: teamPhoto("krystian-wojewoda"),
     slug: "krystian-wojewoda",
   },
   {
     name: "Mariola Śnieg",
     role: "Technik koloryzacji",
-    image: mariola,
+    image: teamPhoto("mariola-snieg"),
     slug: "mariola-snieg",
   },
-  { name: "Aneta", role: "Starsza stylistka", image: aneta, slug: "aneta" },
-  { name: "Ania", role: "Starsza stylistka", image: ania, slug: "ania" },
-  { name: "Monika", role: "Starsza stylistka", image: monika, slug: "monika" },
-  { name: "Marta", role: "Manager / Recepcja", image: marta, slug: "marta" },
+  { name: "Aneta", role: "Starsza stylistka", image: teamPhoto("aneta"), slug: "aneta" },
+  { name: "Ania", role: "Starsza stylistka", image: teamPhoto("ania"), slug: "ania" },
+  { name: "Monika", role: "Starsza stylistka", image: teamPhoto("monika"), slug: "monika" },
+  { name: "Marta", role: "Manager / Recepcja", image: teamPhoto("marta"), slug: "marta" },
 ];
 
 export function Team() {

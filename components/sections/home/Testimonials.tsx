@@ -137,12 +137,12 @@ export function Testimonials() {
                     zIndex: isActive ? 30 : 10,
                   }}
                   transition={{ type: "spring", stiffness: 220, damping: 26 }}
-                  className={`absolute left-1/2 top-1/2 h-[320px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 p-8 shadow-2xl shadow-black/40 sm:h-[280px] sm:w-[360px] ${
+                  className={`absolute left-1/2 top-1/2 h-[320px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 p-8 shadow-2xl shadow-black/40 sm:h-[280px] sm:w-[360px] ${
                     isActive ? "cursor-default" : "cursor-pointer"
                   }`}
                 >
                   <div className="flex h-full flex-col">
-                    <Quote className="h-8 w-8 shrink-0 text-sky-300/40" />
+                    <Quote className="h-8 w-8 shrink-0 text-accent-soft/40" />
 
                     <p className="mt-5 line-clamp-5 flex-1 text-base leading-7 text-white/70">
                       {testimonial.text}

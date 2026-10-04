@@ -47,7 +47,7 @@ export function InteriorGallery() {
                 role="listitem"
                 onClick={() => setOpenIndex(index)}
                 aria-label={`Powiększ zdjęcie: ${photo.alt}`}
-                className={`group relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-2xl border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 lg:aspect-auto lg:h-full lg:w-auto lg:shrink ${photo.span}`}
+                className={`group relative aspect-[4/5] w-[85%] shrink-0 snap-center overflow-hidden rounded-2xl border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 lg:aspect-auto lg:h-full lg:w-auto lg:shrink ${photo.span}`}
               >
                 <Image
                   src={photo.src}

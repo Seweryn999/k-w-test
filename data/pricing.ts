@@ -169,6 +169,57 @@ export const priceHighlights: { service: string; price: string }[] = (
   ] as const
 ).map(({ service, tag }) => ({ service, price: lowestPriceLabel(tag) }));
 
+/**
+ * Objaśnienia gwiazdek dopisanych do nazw usług w cenniku (treść potwierdzona
+ * przez salon). Pokrywają się z punktami 06, 04 i 08 „Zasad cennika", ale
+ * w legendzie stoją przy samych tabelach, żeby gwiazdkę dało się od razu
+ * dopasować do opisu.
+ */
+const priceFootnotes: Record<string, string> = {
+  "*": "Konsultacja kosztuje 50 zł — kwota w całości odejmowana jest przy zrealizowanej usłudze.",
+  "**": "Ostateczna cena zależy od długości i gęstości włosa, zużycia materiału oraz trudności wykonania.",
+  "***": "Wykonujemy jedynie delikatną korektę i podcięcie brody. Nie wykonujemy usług barberskich ani zaawansowanego modelowania brody.",
+};
+
+/**
+ * Rozdziela nazwę usługi i gwiazdkę z jej końca, np. "Broda ***" →
+ * { name: "Broda", marker: "***" }. Nazwy w danych zostają bez zmian —
+ * czyta je też chatbot.
+ */
+export function splitPriceMarker(service: string): {
+  name: string;
+  marker?: string;
+} {
+  const match = service.match(/^(.*?)\s*(\*+)\s*$/);
+
+  return match ? { name: match[1], marker: match[2] } : { name: service };
+}
+
+/**
+ * Legenda dla jednej tabeli: tylko gwiazdki, które w niej występują, od
+ * najkrótszej. Gwiazdka bez opisu zatrzymuje build, żeby nowe oznaczenie
+ * nie trafiło na stronę bez wyjaśnienia.
+ */
+export function priceLegendFor(
+  rows: { service: string }[],
+): { symbol: string; description: string }[] {
+  const symbols = new Set(
+    rows.flatMap((row) => splitPriceMarker(row.service).marker ?? []),
+  );
+
+  return [...symbols]
+    .sort((a, b) => a.length - b.length)
+    .map((symbol) => {
+      const description = priceFootnotes[symbol];
+
+      if (!description) {
+        throw new Error(`Brak objaśnienia oznaczenia "${symbol}" w legendzie cennika`);
+      }
+
+      return { symbol, description };
+    });
+}
+
 export const pricingRules: string[] = [
   "Fryzury wieczorowe, ślubne i weselne upina jedynie Aneta i Monika.",
   "W cenę koloryzacji i trwałej wliczone jest również strzyżenie i modelowanie.",

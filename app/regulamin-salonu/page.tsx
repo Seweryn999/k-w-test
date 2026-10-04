@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
+import { ACCENT_TILE } from "@/components/ui/tile";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
 export const metadata: Metadata = {
@@ -146,8 +147,8 @@ export default function RegulaminPage() {
           </div>
 
           <div className="mx-auto max-w-3xl">
-            <div className="mb-12 rounded-3xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 p-6 md:p-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">
-              <p className="mb-5 text-xs uppercase tracking-[0.45em] text-white/40">
+            <div className={`mb-12 rounded-3xl p-6 md:p-10 ${ACCENT_TILE} shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl`}>
+              <p className="mb-5 text-xs uppercase tracking-[0.45em] text-white/55">
                 Spis treści
               </p>
 
@@ -168,7 +169,7 @@ export default function RegulaminPage() {
             <div className="space-y-12 text-white/70">
               {sections.map((section) => (
                 <div key={section.id} id={section.id}>
-                  <h2 className="text-white/80 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 rounded">
+                  <h2 className="text-white/80 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 rounded">
                     {section.title}
                   </h2>
                   {section.content}

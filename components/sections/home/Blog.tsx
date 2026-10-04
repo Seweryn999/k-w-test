@@ -32,7 +32,7 @@ export function Blog() {
           {blogPosts.map((post) => (
             <article
               key={post.slug}
-              className="group overflow-hidden rounded-3xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 transition duration-300 hover:-translate-y-2 hover:border-sky-400/60 hover:from-sky-400/30"
+              className="group overflow-hidden rounded-3xl border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 transition duration-300 hover:-translate-y-2 hover:border-accent/60 hover:from-accent/30"
             >
               <Link href={postPath(post.slug)} className="block">
                 <div className="relative h-72 overflow-hidden">

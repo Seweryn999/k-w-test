@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { ACCENT_TILE } from "@/components/ui/tile";
 import { Button } from "@/components/ui/Button";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { team as teamMembers, teamPhotoAlt } from "@/data/team";
+import { teamPhotos } from "@/data/team-photos";
 
 export const metadata: Metadata = pageMetadata({
   title: "Zespół - Krystian Wojewoda Hair Design",
@@ -14,42 +16,22 @@ export const metadata: Metadata = pageMetadata({
   path: "/zespol/",
 });
 
-import krystian from "@/assets/images/krystian.webp";
-import ania from "@/assets/images/ania.webp";
-import danuta from "@/assets/images/danuta.webp";
-import monika from "@/assets/images/monika.webp";
-import marta from "@/assets/images/marta.webp";
-import romina from "@/assets/images/romina.webp";
-import mariola from "@/assets/images/mariola.webp";
-import aneta from "@/assets/images/aneta.webp";
-import julia from "@/assets/images/julia.webp";
 
 import { ZespolHero } from "@/components/sections/ZespolHero";
 import { teamBannerPhotos } from "@/data/team-gallery";
 
-const images: Record<string, StaticImageData> = {
-  "krystian-wojewoda": krystian,
-  "mariola-snieg": mariola,
-  danuta,
-  aneta,
-  ania,
-  monika,
-  romina,
-  julia,
-  marta,
-};
 
 /*
-  Na liście pokazujemy tylko osoby z aktualnym portretem (.webp) w `images`.
+  Na liście pokazujemy tylko osoby z aktualnym portretem w `teamPhotos`.
   Kolejność kart bierze się z `data/team.ts` — tutaj decydujemy wyłącznie o tym,
   kto ma zdjęcie. Aneta i Julia mają już swoje .webp, więc wracają na swoje
   miejsca z `data/team.ts`, bez zmieniania kolejności reszty zespołu.
 */
 const team = teamMembers
-  .filter((member) => member.slug in images)
+  .filter((member) => member.slug in teamPhotos)
   .map((member) => ({
     ...member,
-    image: images[member.slug],
+    image: teamPhotos[member.slug],
   }));
 
 export default function ZespolPage() {
@@ -196,10 +178,10 @@ export default function ZespolPage() {
             })}
           </div>
 
-          <div className="mt-24 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04]">
+          <div className={`mt-24 overflow-hidden rounded-[2rem] ${ACCENT_TILE}`}>
             <div className="grid gap-0 md:grid-cols-[1fr_0.8fr]">
               <div className="p-8 md:p-12">
-                <p className="text-xs uppercase tracking-[0.5em] text-white/35">
+                <p className="text-xs uppercase tracking-[0.5em] text-white/55">
                   Rezerwacja
                 </p>
 
@@ -207,13 +189,13 @@ export default function ZespolPage() {
                   Nie wiesz, którego stylistę wybrać?
                 </h2>
 
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-white/55">
+                <p className="mt-6 max-w-2xl text-lg leading-8 text-white/65">
                   Skontaktuj się z nami, a pomożemy dobrać osobę odpowiednią do
                   strzyżenia, koloryzacji lub pielęgnacji.
                 </p>
               </div>
 
-              <div className="flex items-center justify-start border-t border-white/10 p-8 md:justify-center md:border-l md:border-t-0 md:p-12">
+              <div className="flex items-center justify-start border-t border-accent/30 p-8 md:justify-center md:border-l md:border-t-0 md:p-12">
                 <Button href="/kontakt">Skontaktuj się</Button>
               </div>
             </div>

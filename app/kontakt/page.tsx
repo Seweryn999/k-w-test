@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Container } from "@/components/ui/Container";
+import { ACCENT_TILE, ACCENT_TILE_SOFT } from "@/components/ui/tile";
 import { Button } from "@/components/ui/Button";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { BOOKSY_URL } from "@/data/navigation";
@@ -108,7 +109,7 @@ export default function KontaktPage() {
                 </a>
               </div>
 
-              <div className="mt-10 rounded-2xl border border-white/10 bg-black/20 p-6">
+              <div className={`mt-10 rounded-2xl p-6 ${ACCENT_TILE_SOFT}`}>
                 <p className="text-xs uppercase tracking-[0.35em] text-white/40">
                   Godziny otwarcia
                 </p>
@@ -172,8 +173,8 @@ export default function KontaktPage() {
               ))}
             </div>
 
-            <div className="mt-10 flex flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/[0.05] p-8 text-center sm:flex-row sm:justify-between sm:text-left">
-              <p className="max-w-xl text-lg text-white/70">
+            <div className={`mt-10 flex flex-col items-center gap-4 rounded-3xl p-8 text-center sm:flex-row sm:justify-between sm:text-left ${ACCENT_TILE}`}>
+              <p className="max-w-xl text-lg text-white/75">
                 Nie znalazłeś odpowiedzi? Zarezerwuj termin online — wolne
                 godziny widać od razu, bez czekania na oddzwonienie.
               </p>

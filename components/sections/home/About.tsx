@@ -25,19 +25,19 @@ export function About() {
             </p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 p-5">
+              <div className="rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 p-5">
                 <p className="text-3xl font-black">3657</p>
                 <p className="mt-2 text-sm text-white/50">opinii na Booksy</p>
               </div>
 
-              <div className="rounded-2xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 p-5">
+              <div className="rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 p-5">
                 <p className="text-3xl font-black">5.0</p>
                 <p className="mt-2 text-sm text-white/50">
                   średnia ocena Booksy
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 p-5">
+              <div className="rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 p-5">
                 <p className="text-3xl font-black">Łódź</p>
                 <p className="mt-2 text-sm text-white/50">Ogrody Geyera</p>
               </div>
