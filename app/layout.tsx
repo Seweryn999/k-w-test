@@ -40,8 +40,7 @@ export default function RootLayout({
         Dolny padding na mobile robi miejsce pod przyklejony pasek rezerwacji,
         żeby nie zasłaniał ostatniej linijki stopki.
       */}
-      <body className="pb-[calc(76px+env(safe-area-inset-bottom))] md:pb-0">
-      <body className="pb-[76px] lg:pb-0">
+      <body className="pb-[calc(76px+env(safe-area-inset-bottom))] lg:pb-0">
         <Header />
         {children}
         <Footer />

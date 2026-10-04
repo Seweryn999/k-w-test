@@ -119,7 +119,7 @@ export function MobileMenu() {
             role="dialog"
             aria-modal="true"
             aria-label="Menu główne"
-            className="fixed inset-0 z-[999999] isolate h-dvh overflow-y-auto overscroll-contain bg-black text-white md:hidden"
+            className="fixed inset-0 z-[999999] isolate h-dvh overflow-y-auto overscroll-contain bg-black text-white lg:hidden"
           >
             <div aria-hidden className="absolute inset-0 z-0 bg-black" />
 

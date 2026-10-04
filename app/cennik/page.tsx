@@ -10,10 +10,9 @@ import {
   otherPrices,
   priceLegendFor,
   splitPriceMarker,
-  pricingRules as rules,
+  pricingRules,
 } from "@/data/pricing";
 import Link from "next/link";
-import { mainPrices, otherPrices, pricingRules as rules } from "@/data/pricing";
 import { servicePath, services } from "@/data/services";
 
 export const metadata: Metadata = pageMetadata({
@@ -216,7 +215,7 @@ export default function CennikPage() {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              {rules.map((rule, index) => (
+              {pricingRules.map((rule, index) => (
                 <div
                   key={rule}
                   className={`rounded-2xl p-6 ${ACCENT_TILE_SOFT}`}
