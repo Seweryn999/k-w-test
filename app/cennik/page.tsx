@@ -12,6 +12,9 @@ import {
   splitPriceMarker,
   pricingRules as rules,
 } from "@/data/pricing";
+import Link from "next/link";
+import { mainPrices, otherPrices, pricingRules as rules } from "@/data/pricing";
+import { servicePath, services } from "@/data/services";
 
 export const metadata: Metadata = pageMetadata({
   title: "Cennik usług fryzjerskich - Krystian Wojewoda Hair Design",
@@ -230,7 +233,27 @@ export default function CennikPage() {
             </div>
           </div>
 
-          <div className="mt-20 rounded-[2rem] border border-white/10 bg-black/30 p-8 md:p-12">
+          {/* Z cennika do opisów usług — cennik jest częścią klastra /uslugi. */}
+          <div className="mt-20 rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 md:p-12">
+            <h2 className="text-3xl font-black uppercase leading-tight md:text-4xl">
+              Opisy usług
+            </h2>
+
+            <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {services.map((service) => (
+                <li key={service.slug}>
+                  <Link
+                    href={servicePath(service.slug)}
+                    className="block rounded-2xl border border-white/10 px-5 py-4 font-bold uppercase text-white/80 transition hover:bg-white hover:text-black"
+                  >
+                    {service.name} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mt-8 rounded-[2rem] border border-white/10 bg-black/30 p-8 md:p-12">
             <h2 className="max-w-4xl text-4xl font-black uppercase leading-tight md:text-6xl">
               Profesjonalna pielęgnacja i dobór kosmetyków
             </h2>

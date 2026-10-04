@@ -8,6 +8,7 @@ import { ACCENT_TILE } from "@/components/ui/tile";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BUSINESS } from "@/data/business";
 import { getNeighbours, getPost, postPath } from "@/data/blog";
+import { servicePath, servicesForPost } from "@/data/services";
 import { blogPostingSchema, breadcrumbSchema } from "@/lib/schema";
 
 /**
@@ -19,8 +20,9 @@ import { blogPostingSchema, breadcrumbSchema } from "@/lib/schema";
  * a nie dwadzieścia linijek metadanych do przepisania.
  */
 
-/** Linki do usług doklejane pod każdym wpisem — z bloga w stronę oferty. */
+/** Linki doklejane pod każdym wpisem, po linkach do powiązanych usług. */
 const RELATED_LINKS = [
+  { href: "/uslugi", label: "Wszystkie usługi salonu" },
   { href: "/cennik", label: "Cennik usług fryzjerskich" },
   { href: "/zespol", label: "Poznaj stylistów salonu" },
   { href: "/kontakt", label: "Kontakt i dojazd" },
@@ -35,6 +37,15 @@ type ArticleLayoutProps = {
 export function ArticleLayout({ slug, children }: ArticleLayoutProps) {
   const post = getPost(slug);
   const { prev, next } = getNeighbours(slug);
+  // Usługi, które same wskazały ten wpis jako powiązany (data/services) —
+  // artykuł przekazuje moc linków do stron usług, a nie tylko do cennika.
+  const relatedLinks = [
+    ...servicesForPost(slug).map((service) => ({
+      href: servicePath(service.slug),
+      label: `${service.name} w Łodzi`,
+    })),
+    ...RELATED_LINKS,
+  ];
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#050505] via-[#171717] to-[#343434] pt-32 text-white">
@@ -112,7 +123,7 @@ export function ArticleLayout({ slug, children }: ArticleLayoutProps) {
             </p>
 
             <div className="mt-5 flex flex-col gap-3">
-              {RELATED_LINKS.map((link) => (
+              {relatedLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}

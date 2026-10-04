@@ -92,7 +92,7 @@ export function MobileMenu() {
   };
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         ref={openButtonRef}
         type="button"

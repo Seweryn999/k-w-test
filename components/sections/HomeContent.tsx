@@ -8,6 +8,7 @@ import { Testimonials } from "@/components/sections/home/Testimonials";
 import { Pricing } from "@/components/sections/home/Pricing";
 import { Location } from "@/components/sections/home/Location";
 import { Blog } from "@/components/sections/home/Blog";
+import { Faq } from "@/components/sections/home/Faq";
 
 export function HomeContent() {
   return (
@@ -22,6 +23,7 @@ export function HomeContent() {
       <Team />
       <Testimonials />
       <Pricing />
+      <Faq />
       <Location />
       <Blog />
     </>

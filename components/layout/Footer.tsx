@@ -69,6 +69,9 @@ export function Footer() {
           <div>
             <p className="font-bold uppercase">Na skróty</p>
             <div className="mt-4 flex flex-col gap-2">
+              <Link href="/uslugi" className="text-white/60 hover:text-white">
+                Usługi fryzjerskie
+              </Link>
               <Link href="/cennik" className="text-white/60 hover:text-white">
                 Cennik usług
               </Link>

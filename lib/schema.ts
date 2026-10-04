@@ -191,3 +191,76 @@ export function personSchema(slug: string, photoSrc: string) {
     workLocation: { "@id": SALON_ID },
   };
 }
+
+type ServiceInput = {
+  name: string;
+  description: string;
+  /** Ścieżka strony usługi ze slashem na końcu. */
+  path: string;
+  /** Ścieżka do zdjęcia (`StaticImageData.src`). */
+  image: string;
+  /** Widełki z cennika — liczone z data/pricing.ts, nigdy wpisywane ręcznie. */
+  lowPrice: number;
+  highPrice: number;
+};
+
+/**
+ * Usługa salonu. `provider` wskazuje salon przez @id i powtarza jego nazwę
+ * i adres — Google łączy wtedy tę stronę z wizytówką HairSalon ze strony
+ * głównej, a jednocześnie ma komplet danych, gdy czyta tę podstronę osobno.
+ *
+ * Cena jako AggregateOffer z widełkami, bo realna kwota zależy od stylisty
+ * i długości włosów — pojedyncza cena byłaby nieprawdziwa.
+ */
+export function serviceSchema(service: ServiceInput) {
+  const url = absoluteUrl(service.path);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name: service.name,
+    serviceType: service.name,
+    description: service.description,
+    url,
+    image: absoluteUrl(service.image),
+    provider: {
+      "@type": "HairSalon",
+      "@id": SALON_ID,
+      name: BUSINESS.name,
+      telephone: BUSINESS.phone,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: BUSINESS.address.streetAddress,
+        addressLocality: BUSINESS.address.city,
+        postalCode: BUSINESS.address.postalCode,
+        addressCountry: BUSINESS.address.country,
+      },
+    },
+    areaServed: { "@type": "City", name: BUSINESS.address.city },
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: BUSINESS.currency,
+      lowPrice: service.lowPrice,
+      highPrice: service.highPrice,
+      url: BOOKSY_URL,
+    },
+  };
+}
+
+/**
+ * Lista usług na /uslugi/ — mówi Google, że ta strona jest spisem treści
+ * klastra i które adresy do niego należą.
+ */
+export function serviceListSchema(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(item.path),
+    })),
+  };
+}

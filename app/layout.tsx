@@ -41,6 +41,7 @@ export default function RootLayout({
         żeby nie zasłaniał ostatniej linijki stopki.
       */}
       <body className="pb-[calc(76px+env(safe-area-inset-bottom))] md:pb-0">
+      <body className="pb-[76px] lg:pb-0">
         <Header />
         {children}
         <Footer />

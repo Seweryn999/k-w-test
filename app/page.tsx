@@ -10,7 +10,7 @@ import { SocialSection } from "@/components/sections/SocialSection";
 export const metadata: Metadata = pageMetadata({
   title: "Fryzjer Łódź – Krystian Wojewoda Hair Design, Piotrkowska",
   description:
-    "Salon fryzjerski w centrum Łodzi przy Piotrkowskiej 293/305. Koloryzacja, balayage, strzyżenie damskie i męskie oraz metamorfozy. Rezerwacja online przez Booksy.",
+    "Fryzjer w Łodzi przy Piotrkowskiej 293/305, od 1996 r. Koloryzacja, balayage, strzyżenie damskie i męskie, fryzury ślubne, metamorfozy. Rezerwacja online.",
   path: "/",
 });
 
