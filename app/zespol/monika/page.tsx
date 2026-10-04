@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookingLink } from "@/components/ui/BookingLink";
 import { Container } from "@/components/ui/Container";
+import { ACCENT_TILE } from "@/components/ui/tile";
 import { BUSINESS } from "@/data/business";
 import { teamPhotoAlt } from "@/data/team";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -179,8 +180,8 @@ export default function MonikaPage() {
           </AnimatedSection>
 
           <AnimatedSection>
-            <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 md:p-10">
-              <p className="text-xs uppercase tracking-[0.45em] text-white/35">
+            <div className={`mt-8 rounded-[2rem] p-8 md:p-10 ${ACCENT_TILE}`}>
+              <p className="text-xs uppercase tracking-[0.45em] text-white/55">
                 Wizyta
               </p>
 
@@ -188,7 +189,7 @@ export default function MonikaPage() {
                 Chcesz umówić wizytę?
               </h2>
 
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/55">
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/65">
                 Skontaktuj się z salonem i zapytaj o dostępne terminy do Moniki.
               </p>
 

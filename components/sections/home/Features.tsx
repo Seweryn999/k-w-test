@@ -48,7 +48,7 @@ export function Features() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="rounded-3xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 p-7 transition duration-300 hover:border-sky-400/60 hover:from-sky-400/30"
+              className="rounded-3xl border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 p-7 transition duration-300 hover:border-accent/60 hover:from-accent/30"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black">
                 <feature.icon className="h-6 w-6" />

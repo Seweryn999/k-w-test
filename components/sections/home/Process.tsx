@@ -52,9 +52,9 @@ export function Process() {
           {process.map((step) => (
             <div
               key={step.number}
-              className="group relative overflow-hidden rounded-3xl border border-sky-400/30 bg-gradient-to-br from-sky-400/20 to-sky-500/5 p-7 transition duration-300 hover:border-sky-400/60 hover:from-sky-400/30"
+              className="group relative overflow-hidden rounded-3xl border border-accent/30 bg-gradient-to-br from-accent/20 to-accent-strong/5 p-7 transition duration-300 hover:border-accent/60 hover:from-accent/30"
             >
-              <span className="absolute -right-2 -top-6 text-7xl font-black text-sky-300/10 transition group-hover:text-sky-300/20">
+              <span className="absolute -right-2 -top-6 text-7xl font-black text-accent-soft/10 transition group-hover:text-accent-soft/20">
                 {step.number}
               </span>
 

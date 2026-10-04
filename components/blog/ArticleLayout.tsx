@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { BookingLink } from "@/components/ui/BookingLink";
 import { Container } from "@/components/ui/Container";
+import { ACCENT_TILE } from "@/components/ui/tile";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BUSINESS } from "@/data/business";
 import { getNeighbours, getPost, postPath } from "@/data/blog";
@@ -156,7 +157,7 @@ export function ArticleLayout({ slug, children }: ArticleLayoutProps) {
             </AnimatedSection>
           )}
 
-          <AnimatedSection className="mt-20 rounded-3xl border border-white/10 bg-white/[0.05] p-8 text-center backdrop-blur md:p-12">
+          <AnimatedSection className={`mt-20 rounded-3xl p-8 text-center backdrop-blur md:p-12 ${ACCENT_TILE}`}>
             <p className="text-xs uppercase tracking-[0.45em] text-white/45">
               Krystian Wojewoda Hair Design
             </p>

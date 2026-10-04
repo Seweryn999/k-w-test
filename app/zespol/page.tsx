@@ -3,6 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { ACCENT_TILE } from "@/components/ui/tile";
 import { Button } from "@/components/ui/Button";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { team as teamMembers, teamPhotoAlt } from "@/data/team";
@@ -196,10 +197,10 @@ export default function ZespolPage() {
             })}
           </div>
 
-          <div className="mt-24 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04]">
+          <div className={`mt-24 overflow-hidden rounded-[2rem] ${ACCENT_TILE}`}>
             <div className="grid gap-0 md:grid-cols-[1fr_0.8fr]">
               <div className="p-8 md:p-12">
-                <p className="text-xs uppercase tracking-[0.5em] text-white/35">
+                <p className="text-xs uppercase tracking-[0.5em] text-white/55">
                   Rezerwacja
                 </p>
 
@@ -207,13 +208,13 @@ export default function ZespolPage() {
                   Nie wiesz, którego stylistę wybrać?
                 </h2>
 
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-white/55">
+                <p className="mt-6 max-w-2xl text-lg leading-8 text-white/65">
                   Skontaktuj się z nami, a pomożemy dobrać osobę odpowiednią do
                   strzyżenia, koloryzacji lub pielęgnacji.
                 </p>
               </div>
 
-              <div className="flex items-center justify-start border-t border-white/10 p-8 md:justify-center md:border-l md:border-t-0 md:p-12">
+              <div className="flex items-center justify-start border-t border-accent/30 p-8 md:justify-center md:border-l md:border-t-0 md:p-12">
                 <Button href="/kontakt">Skontaktuj się</Button>
               </div>
             </div>

@@ -44,7 +44,7 @@ export function BookingLink({
       target="_blank"
       rel="noopener noreferrer"
       data-cta="booksy"
-      className={`inline-flex items-center justify-center rounded-full font-black uppercase tracking-[0.18em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center justify-center rounded-full font-black uppercase tracking-[0.18em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
     >
       {children}
     </a>

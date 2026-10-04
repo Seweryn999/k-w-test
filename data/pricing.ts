@@ -162,6 +162,55 @@ export const priceHighlights: { service: string; price: string }[] = (
   ] as const
 ).map(({ service, tag }) => ({ service, price: lowestPriceLabel(tag) }));
 
+/**
+ * Objaśnienia gwiazdek dopisanych do nazw usług w cenniku. Strona salonu
+ * nigdzie ich nie objaśniała, więc opisy wyprowadzone są z `pricingRules`:
+ *
+ * - `*`   stoi wyłącznie przy „Konsultacja" → zasada o konsultacji za 50 zł.
+ * - `***` stoi wyłącznie przy „Broda" → zasada o korekcie brody.
+ * - `**`  stoi przy koloryzacjach, ale też przy demakijażu, upięciu,
+ *         strzyżeniu dziecięcym czy zabiegu Enviro, a nie stoi np. przy
+ *         „Farbowanie odrostu + Strzyżenie" — z treści nie da się ustalić,
+ *         co oznacza.
+ *
+ * TODO(Krystian): potwierdzić znaczenie `**` (oraz dla pewności `*` i `***`).
+ * Do tego czasu `**` opisuje neutralna zasada nr 4 z regulaminu cennika,
+ * która i tak dotyczy wszystkich usług.
+ */
+const priceMarkerDescriptions: Record<string, string> = {
+  "*": "Koszt konsultacji jest w całości odejmowany od ceny zrealizowanej usługi.",
+  "**": "Ostateczna cena zależy od długości i gęstości włosa, zużycia materiału oraz trudności wykonania.",
+  "***": "Wykonujemy jedynie delikatną korektę i podcięcie brody, bez usług barberskich.",
+};
+
+/** Gwiazdka (lub kilka) na końcu nazwy usługi, np. "Broda ***" → "***". */
+function markerOf(service: string): string | undefined {
+  return service.match(/(\*+)\s*$/)?.[1];
+}
+
+/**
+ * Legenda pod cennikiem — tylko te oznaczenia, które faktycznie występują
+ * w tabelach, od najkrótszego. Gwiazdka bez opisu zatrzymuje build, żeby
+ * nowe oznaczenie nie trafiło na stronę bez wyjaśnienia.
+ */
+export const priceLegend: { symbol: string; description: string }[] = [
+  ...new Set(
+    [...mainPrices, ...otherPrices]
+      .map((row) => markerOf(row.service))
+      .filter((marker): marker is string => Boolean(marker)),
+  ),
+]
+  .sort((a, b) => a.length - b.length)
+  .map((symbol) => {
+    const description = priceMarkerDescriptions[symbol];
+
+    if (!description) {
+      throw new Error(`Brak objaśnienia oznaczenia "${symbol}" w legendzie cennika`);
+    }
+
+    return { symbol, description };
+  });
+
 export const pricingRules: string[] = [
   "Fryzury wieczorowe, ślubne i weselne upina jedynie Aneta i Monika.",
   "W cenę koloryzacji i trwałej wliczone jest również strzyżenie i modelowanie.",

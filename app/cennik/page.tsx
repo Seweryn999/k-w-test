@@ -4,7 +4,13 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { BookingLink } from "@/components/ui/BookingLink";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { mainPrices, otherPrices, pricingRules as rules } from "@/data/pricing";
+import { ACCENT_TILE, ACCENT_TILE_SOFT } from "@/components/ui/tile";
+import {
+  mainPrices,
+  otherPrices,
+  priceLegend,
+  pricingRules as rules,
+} from "@/data/pricing";
 
 export const metadata: Metadata = pageMetadata({
   title: "Cennik usług fryzjerskich - Krystian Wojewoda Hair Design",
@@ -39,10 +45,10 @@ export default function CennikPage() {
             </p>
           </div>
 
-          <div className="mb-12 rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 md:p-10">
+          <div className={`mb-12 rounded-[2rem] p-6 md:p-10 ${ACCENT_TILE}`}>
             <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
               <div>
-                <p className="text-xs uppercase tracking-[0.45em] text-white/35">
+                <p className="text-xs uppercase tracking-[0.45em] text-white/55">
                   Mariola i Krystian
                 </p>
 
@@ -51,7 +57,7 @@ export default function CennikPage() {
                 </h2>
               </div>
 
-              <p className="max-w-md text-sm leading-7 text-white/50">
+              <p className="max-w-md text-sm leading-7 text-white/65">
                 Ceny podane są w złotówkach. Ostateczna kwota może zależeć od
                 długości, gęstości włosów i zużycia materiału.
               </p>
@@ -80,8 +86,8 @@ export default function CennikPage() {
             ))}
           </div>
 
-          <div className="mb-12 mt-20 rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 md:p-10">
-            <p className="text-xs uppercase tracking-[0.45em] text-white/35">
+          <div className={`mb-12 mt-20 rounded-[2rem] p-6 md:p-10 ${ACCENT_TILE}`}>
+            <p className="text-xs uppercase tracking-[0.45em] text-white/55">
               Pozostali fryzjerzy
             </p>
 
@@ -89,7 +95,7 @@ export default function CennikPage() {
               Cennik Pozostałych Fryzjerów
             </h2>
 
-            <p className="mt-5 max-w-3xl text-sm leading-7 text-white/50">
+            <p className="mt-5 max-w-3xl text-sm leading-7 text-white/65">
               Cena zależy od długości i gęstości włosów, zużycia materiału oraz
               stopnia trudności wykonania usługi.
             </p>
@@ -117,20 +123,37 @@ export default function CennikPage() {
             ))}
           </div>
 
-          <div className="mt-12 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04]">
+          {/*
+            Legenda gwiazdek z obu tabel. Lista budowana z danych cennika,
+            więc pokazuje tylko oznaczenia, które faktycznie w nim występują.
+          */}
+          {priceLegend.length > 0 && (
+            <dl className="mt-6 grid gap-2 px-4 text-xs leading-6 text-white/50 md:px-8 md:text-sm">
+              {priceLegend.map(({ symbol, description }) => (
+                <div key={symbol} className="flex gap-3">
+                  <dt className="w-7 shrink-0 font-black text-white/75">
+                    {symbol}
+                  </dt>
+                  <dd>{description}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+
+          <div className={`mt-12 overflow-hidden rounded-[2rem] ${ACCENT_TILE}`}>
             <div className="grid gap-0 lg:grid-cols-[1fr_auto]">
               <div className="p-8 md:p-10">
                 <h2 className="max-w-4xl text-3xl font-black uppercase leading-tight md:text-4xl">
                   Usługa, której nie znalazłeś/aś w cenniku?
                 </h2>
 
-                <p className="mt-5 max-w-3xl text-lg leading-8 text-white/55">
+                <p className="mt-5 max-w-3xl text-lg leading-8 text-white/65">
                   Napisz lub zadzwoń, a podamy dokładną cenę dopasowaną do
                   Twoich włosów.
                 </p>
               </div>
 
-              <div className="flex items-center border-t border-white/10 p-8 md:p-10 lg:border-l lg:border-t-0">
+              <div className="flex items-center border-t border-accent/30 p-8 md:p-10 lg:border-l lg:border-t-0">
                 <Button href="/kontakt">Zapytaj o cenę</Button>
               </div>
             </div>
@@ -151,9 +174,9 @@ export default function CennikPage() {
               {rules.map((rule, index) => (
                 <div
                   key={rule}
-                  className="rounded-2xl border border-white/10 bg-white/[0.035] p-6"
+                  className={`rounded-2xl p-6 ${ACCENT_TILE_SOFT}`}
                 >
-                  <div className="mb-5 text-3xl font-black text-white/20">
+                  <div className="mb-5 text-3xl font-black text-accent-soft/40">
                     {String(index + 1).padStart(2, "0")}
                   </div>
 

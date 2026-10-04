@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { BookingLink } from "@/components/ui/BookingLink";
 import { Container } from "@/components/ui/Container";
+import { ACCENT_TILE } from "@/components/ui/tile";
 import { blogPosts, postPath } from "@/data/blog";
 import { BUSINESS } from "@/data/business";
 
@@ -101,7 +102,7 @@ export default function BlogPage() {
             ))}
           </div>
 
-          <div className="mt-20 rounded-3xl border border-white/10 bg-white/[0.05] p-8 text-center backdrop-blur md:p-12">
+          <div className={`mt-20 rounded-3xl p-8 text-center backdrop-blur md:p-12 ${ACCENT_TILE}`}>
             <p className="text-xs uppercase tracking-[0.45em] text-white/45">
               {BUSINESS.name}
             </p>

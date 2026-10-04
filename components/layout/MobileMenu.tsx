@@ -8,7 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { BOOKSY_URL, navigation } from "@/data/navigation";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
 
 /** Wspólna typografia dla wszystkich pozycji menu — podstron i sekcji. */
 const NAV_ITEM =
